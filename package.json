@@ -1,0 +1,22 @@
+{
+  "name": "inventory_manager_api",
+  "version": "1.0.0",
+  "description": "Api para llevar el control de inventario de una ventana de comidas rápidas.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryan2893/INVENTORY_MANAGER_API.git"
+  },
+  "author": "Bryan Hernandez Arguello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryan2893/INVENTORY_MANAGER_API/issues"
+  },
+  "homepage": "https://github.com/bryan2893/INVENTORY_MANAGER_API#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
