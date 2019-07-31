@@ -4,11 +4,11 @@ let foodModel = require('../models/food');
 exports.getAllFoods = function(req,res){
 
     foodModel.getAllFoods().then((results)=>{
-        res.status(200).send(results);
+        console.log(results);
+        res.status(200).json(results);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
-
 };
 
 exports.getAFood = function(req,res){

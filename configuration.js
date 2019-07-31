@@ -6,7 +6,7 @@ const configuration = {
         port: 3306,
         user: 'root',
         password: 'casanueva4321',
-        database: 'dbname',
+        database: 'jehova_jireth_manager',
         insecureAuth: true
     }
 };
