@@ -51,7 +51,6 @@ exports.deleteFood = (foodId)=>{
 
 exports.updateFood = (foodDTO)=>{
 
-    //Hacer la logica para actualizar!!
     return new Promise((resolve,reject)=>{
         
         let sql = `UPDATE productos

@@ -5,7 +5,6 @@ let FOOD = require('../models/DTO/food');
 exports.getAllFoods = function(req,res){
 
     foodModel.getAllFoods().then((results)=>{
-        console.log(results);
         res.status(200).json(results);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
