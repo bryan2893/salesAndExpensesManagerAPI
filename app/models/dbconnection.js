@@ -10,10 +10,12 @@ var connection = mysql.createConnection({
     insecureAuth: true
 });
 
+/*
 connection.connect((err)=>{
     if (!err){
         console.log("conexion a mysql exitosa!");
     }
 });
+*/
 
 module.exports = connection;
