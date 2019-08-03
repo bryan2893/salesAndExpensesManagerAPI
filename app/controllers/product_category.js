@@ -23,7 +23,7 @@ exports.getAProductCategory = function(req,res){
 
 exports.saveProductCategory = function(req,res){
     let bodyData = req.body;
-    let productCategoryDTO = new PRODUCT_CATEGORY(bodyData.codigo,bodyData.nombre);
+    let productCategoryDTO = new PRODUCT_CATEGORY(null,bodyData.nombre);
 
     productCategoryModel.saveProductCategory(productCategoryDTO).then((result)=>{
         res.status(200).send(result);
@@ -41,7 +41,7 @@ exports.deleteProductCategory = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:error.message});
+        res.status(401).send({message:"Codigo de categoria requerido para la consulta!"});
     }
 };
 
