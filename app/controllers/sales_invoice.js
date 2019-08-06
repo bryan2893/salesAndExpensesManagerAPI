@@ -52,3 +52,25 @@ exports.deleteSaleInvoice = function(req,res){
         res.status(401).send({message:"El numero de factura es requerido para realizar la consulta!"});
     }
 };
+
+exports.getSalesInvoiceByPagination = function(req,res){
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    if(page_request && limit){
+        salesInvoiceModel.getAllSalesInvoiceByPagination(page_request,limit).then((result)=>{
+            res.status(200).send(result);
+        }).catch((error)=>{
+            res.status(401).send({message:error.message});
+        });
+    }else{
+        res.status(401).send({message:"Se necesita el numero de pagina y el limite por pagina para realizar la consulta!"});
+    }
+};

@@ -49,3 +49,25 @@ exports.deleteSaleInvoice = (num_factura)=>{
         });
     });
 };
+
+/*
+Para obtener el numero de páginas se divide la 'cantidad total de registros' / 'cantidad por página'.
+si hay residuo en la division se debe sumar una página mas.
+*/
+exports.getAllSalesInvoiceByPagination = (pageRequest,limit)=>{
+    return new Promise((resolve,reject)=>{
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+
+        let sql = "SELECT * FROM facturas_venta LIMIT ?,?";
+
+        connection.query(sql, [offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+
+    });
+};

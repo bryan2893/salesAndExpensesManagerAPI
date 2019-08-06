@@ -6,5 +6,6 @@ router.get('/salesInvoice/getAllSaleInvoice',salesInvoiceController.getAllSalesI
 router.get('/salesInvoice/getSaleInvoice/:num_factura',salesInvoiceController.getASaleInvoice);
 router.post('/salesInvoice/saveSaleInvoice',salesInvoiceController.saveSaleInvoice);
 router.get('/salesInvoice/deleteSaleInvoice/:num_factura',salesInvoiceController.deleteSaleInvoice);
+router.get('/salesInvoice/getAllSalesInvoiceByPagination/:page_request/:limit',salesInvoiceController.getSalesInvoiceByPagination);
 
 module.exports = router;
