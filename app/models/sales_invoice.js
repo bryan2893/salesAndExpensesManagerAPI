@@ -98,3 +98,21 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = (date_from,date_to,pageRequ
 
     });
 };
+
+//******voy creando esta *************/
+exports.getAllSalesInvoiceByEmisorAndPagination = (emisor_id,pageRequest,limit)=>{
+    return new Promise((resolve,reject)=>{
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+
+        let sql = `SELECT * FROM facturas_venta WHERE cedula_emisor = ? LIMIT ?,?`;
+
+        connection.query(sql, [emisor_id,offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+    });
+};

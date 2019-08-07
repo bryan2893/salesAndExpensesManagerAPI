@@ -76,7 +76,6 @@ exports.getSalesInvoiceByPagination = function(req,res){
 };
 
 exports.getAllSalesInvoiceByDateRangeAndPagination = function(req,res){
-    //date_from,date_to,pageRequest,limit
     let date_from = null;
     let date_to = null;
     let page_request = null;
@@ -101,4 +100,28 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = function(req,res){
     }else{
         res.status(401).send({message:"Por favor enviar los parámetros necesarios para la consulta"});
     }
+};
+
+exports.getAllSalesInvoiceByEmisorAndPagination = function(req,res){
+    //emisor_id,pageRequest,limit
+    let emisor_id = req.params.emisor_id;
+    let page_request = null;
+    let limit = null;
+
+    if(!emisor_id){
+        res.status(401).send({message:"Es necesario la cedula del trabajador para realizar la consulta!"});
+    }
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    salesInvoiceModel.getAllSalesInvoiceByEmisorAndPagination(emisor_id,page_request,limit).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
 };
