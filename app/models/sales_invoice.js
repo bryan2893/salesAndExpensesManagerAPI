@@ -59,12 +59,39 @@ exports.getAllSalesInvoiceByPagination = (pageRequest,limit)=>{
         if(pageRequest < 1){
             pageRequest = 1;
         }
+        if(pageRequest < 1){
+            reject(new Error("El limite de registros debe ser 1 o mayor a 1 !"));
+        }
 
         let offSet = (pageRequest-1) * limit;
 
         let sql = "SELECT * FROM facturas_venta LIMIT ?,?";
 
         connection.query(sql, [offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+    });
+};
+
+exports.getAllSalesInvoiceByDateRangeAndPagination = (date_from,date_to,pageRequest,limit)=>{
+    return new Promise((resolve,reject)=>{
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+
+        let dateFrom = new Date(date_from);
+        let dateTo = new Date(date_to);
+
+        if(dateFrom > dateTo){
+            reject(new Error("Imposible extrer registros en el rango de fechas especificado!"));
+        }
+
+        let sql = `SELECT * FROM facturas_venta WHERE fecha BETWEEN ? AND ? LIMIT ?,?`;
+
+        connection.query(sql, [date_from,date_to,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });

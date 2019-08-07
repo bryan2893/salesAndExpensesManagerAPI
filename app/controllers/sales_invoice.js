@@ -74,3 +74,31 @@ exports.getSalesInvoiceByPagination = function(req,res){
         res.status(401).send({message:"Se necesita el numero de pagina y el limite por pagina para realizar la consulta!"});
     }
 };
+
+exports.getAllSalesInvoiceByDateRangeAndPagination = function(req,res){
+    //date_from,date_to,pageRequest,limit
+    let date_from = null;
+    let date_to = null;
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    date_from = req.params.date_from;
+    date_to = req.params.date_to;
+
+    if(date_from && date_to){
+        salesInvoiceModel.getAllSalesInvoiceByDateRangeAndPagination(date_from,date_to,page_request,limit).then((result)=>{
+            res.status(200).send(result);
+        }).catch((error)=>{
+            res.status(401).send({message:error.message});
+        });
+    }else{
+        res.status(401).send({message:"Por favor enviar los parámetros necesarios para la consulta"});
+    }
+};

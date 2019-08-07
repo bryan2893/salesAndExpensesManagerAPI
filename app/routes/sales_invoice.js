@@ -7,5 +7,6 @@ router.get('/salesInvoice/getSaleInvoice/:num_factura',salesInvoiceController.ge
 router.post('/salesInvoice/saveSaleInvoice',salesInvoiceController.saveSaleInvoice);
 router.get('/salesInvoice/deleteSaleInvoice/:num_factura',salesInvoiceController.deleteSaleInvoice);
 router.get('/salesInvoice/getAllSalesInvoiceByPagination/:page_request/:limit',salesInvoiceController.getSalesInvoiceByPagination);
+router.get('/salesInvoice/getAllSalesInvoiceByDateRangeAndPagination/:date_from/:date_to/:page_request/:limit',salesInvoiceController.getAllSalesInvoiceByDateRangeAndPagination);
 
 module.exports = router;
