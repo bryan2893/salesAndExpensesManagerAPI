@@ -125,3 +125,30 @@ exports.getAllSalesInvoiceByEmisorAndPagination = function(req,res){
         res.status(401).send({message:error.message});
     });
 };
+
+exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = function(req,res){
+    let emisor_id = req.params.emisor_id;
+
+    if(!emisor_id){
+        return res.status(401).send({message:"Es necesario la cedula del trabajador para realizar la consulta!"});
+    }
+
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    let dateFrom = req.params.date_from;
+    let dateTo = req.params.date_to;
+
+    salesInvoiceModel.getAllSalesInvoiceByEmisorDateRangeAndPagination(emisor_id,dateFrom,dateTo,page_request,limit).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+};
