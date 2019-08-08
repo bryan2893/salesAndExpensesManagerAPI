@@ -1,6 +1,7 @@
 let express = require('express');
 let salesInvoiceController = require('../controllers/sales_invoice');
 let router = express.Router();
+let authMiddleware = require('../middleware/auth');
 
 router.get('/salesInvoice/getAllSaleInvoice',salesInvoiceController.getAllSalesInvoice);
 router.get('/salesInvoice/getSaleInvoice/:num_factura',salesInvoiceController.getASaleInvoice);

@@ -1,6 +1,7 @@
 let express = require('express');
 let workerController = require('../controllers/worker');
 let router = express.Router();
+let authMiddleware = require('../middleware/auth');
 
 router.get('/workers/getAllWorkers',workerController.getAllWorkers);
 router.get('/workers/getWorker/:workerId',workerController.getAWorker);

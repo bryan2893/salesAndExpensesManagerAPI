@@ -1,6 +1,7 @@
 let express = require('express');
 let suppliesController = require('../controllers/supplie');
 let router = express.Router();
+let authMiddleware = require('../middleware/auth');
 
 router.get('/supplies/getAllSupplies',suppliesController.getAllSupplies);
 router.get('/supplies/getSupplie/:supplieCode',suppliesController.getASupplie);

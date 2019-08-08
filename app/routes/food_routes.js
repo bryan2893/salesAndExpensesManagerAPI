@@ -1,6 +1,7 @@
 let express = require('express');
 let foodController = require('../controllers/food');
 let router = express.Router();
+let authMiddleware = require('../middleware/auth');
 
 router.get('/foods/getAllFoods',foodController.getAllFoods);
 router.get('/foods/getFood/:foodId',foodController.getAFood);

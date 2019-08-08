@@ -1,5 +1,6 @@
 let express = require('express');
 let router = express.Router();
+let authMiddleware = require('../middleware/auth');
  
 //APP ENDPOINTS
 router.get('/',(req,res)=>{

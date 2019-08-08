@@ -1,6 +1,6 @@
 const configuration = {
     PORT : process.env.PORT || 3000,
-    SECRET : "jIRETH_FOREVER",
+    SECRET_TOKEN : process.env.SECRET_TOKEN || "casanueva432128932",
     DB_CREDENTIALS : {
         host: 'localhost',
         port: 3306,

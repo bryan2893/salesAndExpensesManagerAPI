@@ -25,6 +25,16 @@ exports.getWorker = (workerId) => {
     });
 };
 
+exports.getWorkerByIdAndPassword = (workerId,password) => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM trabajadores WHERE cedula = ? AND password = ?';
+        connection.query(sql,[workerId,password],function (error, result, fields) {
+            if (error) reject(error);
+            resolve(result);
+        });
+    });
+};
+
 exports.saveWorker = (workerDTO)=>{
     return new Promise((resolve,reject)=>{
         let sql    = `INSERT INTO trabajadores (cedula,nombre_completo,fecha_ingreso,admin,password) values ? `;
