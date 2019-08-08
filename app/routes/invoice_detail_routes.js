@@ -3,6 +3,6 @@ let invoiceDetailController = require('../controllers/invoice_detail');
 let router = express.Router();
 let authMiddleware = require('../middleware/auth');
 
-router.get('/invoiceDetail/getInvoiceDetails/:num_factura',invoiceDetailController.getInvoiceDetails);
+router.get('/invoiceDetail/getInvoiceDetails/:num_factura',authMiddleware.ensureAuthenticate,invoiceDetailController.getInvoiceDetails);
 
 module.exports = router;
