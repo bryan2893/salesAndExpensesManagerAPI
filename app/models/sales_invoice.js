@@ -158,3 +158,64 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = (emisor_id,date_from,
         
     });
 };
+
+exports.getSalesInvoiceByState = (state) => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM facturas_venta WHERE estado = ' + connection.escape(state);
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+    });
+};
+
+exports.getSalesInvoiceByStateAndPaginate = (state,pageRequest,limit) => {
+    return new Promise((resolve,reject)=>{
+
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+
+        let sql    = `SELECT * FROM facturas_venta WHERE estado = ? LIMIT ?,?`;
+
+        connection.query(sql, [state,offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+
+    });
+};
+
+exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pageRequest,limit) => {
+    return new Promise((resolve,reject)=>{
+
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+        
+        let dateFrom = null;
+        let dateTo = null;
+        try{
+            dateFrom = new Date(date_from);
+            dateTo = new Date(date_to);
+        }catch(error){
+            reject(new Error(error.message));
+        }
+
+        if(dateFrom > dateTo){
+            reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
+        }
+
+        let sql    = `SELECT * FROM facturas_venta WHERE estado = ? AND (fecha BETWEEN ? AND ?) LIMIT ?,?`;
+
+        connection.query(sql, [state,dateFrom,dateTo,offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+        
+    });
+};

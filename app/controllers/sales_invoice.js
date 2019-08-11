@@ -155,3 +155,68 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = function(req,res){
         res.status(401).send({message:error.message});
     });
 };
+
+exports.getSalesInvoiceByState = function(req,res){
+    let estado = req.params.state;
+    
+    salesInvoiceModel.getSalesInvoiceByState(estado).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+};
+
+exports.getSalesInvoiceByStateAndPaginate = function(req,res){
+    let estado = req.params.state;
+
+    if(!estado){
+        return res.status(401).send({message:"Es necesario el parámetro estado!"});
+    }
+
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    salesInvoiceModel.getSalesInvoiceByStateAndPaginate(estado,page_request,limit).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+
+
+}
+
+exports.getSalesInvoiceByStateDateRangeAndPaginate = function(req,res){
+    let state = req.params.state;
+
+    if(!state){
+        return res.status(401).send({message:"Es necesario el parametro estado!"});
+    }
+
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    let dateFrom = req.params.date_from;
+    let dateTo = req.params.date_to;
+
+    if(dateFrom && dateTo){
+        salesInvoiceModel.getSalesInvoiceByStateDateRangeAndPaginate(state,dateFrom,dateTo,page_request,limit).then((result)=>{
+            res.status(200).send(result);
+        }).catch((error)=>{
+            res.status(401).send({message:error.message});
+        });
+    }
+};
