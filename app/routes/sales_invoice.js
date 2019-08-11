@@ -10,6 +10,6 @@ router.get('/salesInvoice/deleteSaleInvoice/:num_factura',authMiddleware.ensureA
 router.get('/salesInvoice/getAllSalesInvoiceByPagination/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getSalesInvoiceByPagination);
 router.get('/salesInvoice/getAllSalesInvoiceByDateRangeAndPagination/:date_from/:date_to/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getAllSalesInvoiceByDateRangeAndPagination);
 router.get('/salesInvoice/getAllSalesInvoiceByEmisorAndPagination/:emisor_id/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getAllSalesInvoiceByEmisorAndPagination);
-router.get('/salesInvoice/getAllSalesInvoiceByEmisorDateRangeAndPagination/:emisor_id/:date_from/:date_to/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getAllSalesInvoiceByEmisorAndPagination);
+router.get('/salesInvoice/getAllSalesInvoiceByEmisorDateRangeAndPagination/:emisor_id/:date_from/:date_to/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getAllSalesInvoiceByEmisorDateRangeAndPagination);
 
 module.exports = router;

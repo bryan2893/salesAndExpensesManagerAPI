@@ -1,12 +1,17 @@
 /*Se comunican con la base de datos para manipular 
 informacion relacionada con comidas especificamente
 */
+
+/*
+*****QUERY PARA UTILIZAR LUEGO*****
+SELECT facturas_venta.num_factura,trabajadores.nombre_completo as trabajador,facturas_venta.fecha,facturas_venta.nombre_cliente,faturas_venta.detalles,facturas_venta.para_llevar,facturas_venta.estado'+
+        'FROM facturas_venta INNER JOIN trabajadores WHERE facturas_venta.cedula_emisor = trabajadores.cedula
+*/
 let connection = require('./dbconnection');
 
 exports.getAllSalesInvoice = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT facturas_venta.num_factura,trabajadores.nombre_completo as trabajador,facturas_venta.fecha,facturas_venta.nombre_cliente '+
-        'FROM facturas_venta INNER JOIN trabajadores WHERE facturas_venta.cedula_emisor = trabajadores.cedula';
+        let sql    = 'SELECT * FROM facturas_venta';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -16,8 +21,7 @@ exports.getAllSalesInvoice = () => {
 
 exports.getSaleInvoice = (num_factura) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT facturas_venta.num_factura,trabajadores.nombre_completo as trabajador,facturas_venta.fecha,facturas_venta.nombre_cliente '+
-        'FROM facturas_venta INNER JOIN trabajadores WHERE (facturas_venta.cedula_emisor = trabajadores.cedula) and facturas_venta.num_factura = ' + connection.escape(num_factura);
+        let sql    = 'SELECT * FROM facturas_venta WHERE num_factura = ' + connection.escape(num_factura);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -29,13 +33,14 @@ exports.saveSaleInvoice = (salesInvoiceDTO)=>{
     //El parametro 'detalles' es un objeto json el cual es una lista de detalles de la factura. 'detalles es pasado'
     //por la funcion JSON.stringify() para que pueda ser reconocido por la base de datos.
     return new Promise((resolve,reject)=>{
-        let sql    = `CALL guardarFacturaVenta(?,?,?,?,?)`;
-        let values = [salesInvoiceDTO.cedula_emisor,salesInvoiceDTO.fecha,salesInvoiceDTO.nombre_cliente,salesInvoiceDTO.detalles,salesInvoiceDTO.detalles_factura];
+        let sql    = `CALL guardarFacturaVenta(?,?,?,?,?,?,?)`;
+        let values = [salesInvoiceDTO.cedula_emisor,salesInvoiceDTO.fecha,salesInvoiceDTO.nombre_cliente,salesInvoiceDTO.detalles,salesInvoiceDTO.para_llevar,salesInvoiceDTO.estado,salesInvoiceDTO.detalles_factura];
 
         connection.query(sql, values ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });
+
     });
 };
 
@@ -150,6 +155,6 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = (emisor_id,date_from,
             if (error) reject(error);
             resolve(results);
         });
-
+        
     });
 };

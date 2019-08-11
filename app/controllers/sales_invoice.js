@@ -34,7 +34,7 @@ exports.saveSaleInvoice = function(req,res){
         return res.status(401).send({message:error.message});
     }
 
-    let saleInvoiceDTO = new SALE_INVOICE(null,cedula_emisor,bodyData.fecha,bodyData.nombre_cliente,bodyData.detalles_extra,detalles_factura);
+    let saleInvoiceDTO = new SALE_INVOICE(null,cedula_emisor,bodyData.fecha,bodyData.nombre_cliente,bodyData.detalles_extra,bodyData.para_llevar,bodyData.estado,detalles_factura);
 
     salesInvoiceModel.saveSaleInvoice(saleInvoiceDTO).then((result)=>{
         res.status(200).send(result);
