@@ -219,3 +219,16 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pa
         
     });
 };
+
+exports.updateSaleInvoiceState = (state,num_factura) => {
+    return new Promise((resolve,reject)=>{
+
+        let sql    = `UPDATE facturas_venta SET estado = ? WHERE num_factura = ?`;
+
+        connection.query(sql, [state,num_factura] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+        
+    });
+};

@@ -220,3 +220,19 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = function(req,res){
         });
     }
 };
+
+exports.updateSaleInvoiceState = function(req,res){
+    let state = req.params.state;
+    let num_factura = req.params.num_factura;
+
+    if(!state || !num_factura){
+        return res.status(401).send({message:"Es necesario el parametro 'estado' y el parametro 'num_factura' !"});
+    }
+
+    salesInvoiceModel.updateSaleInvoiceState(state,num_factura).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+    
+};
