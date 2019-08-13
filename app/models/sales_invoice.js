@@ -33,14 +33,14 @@ exports.saveSaleInvoice = (salesInvoiceDTO)=>{
     //El parametro 'detalles' es un objeto json el cual es una lista de detalles de la factura. 'detalles es pasado'
     //por la funcion JSON.stringify() para que pueda ser reconocido por la base de datos.
     return new Promise((resolve,reject)=>{
-        let sql    = `CALL guardarFacturaVenta(?,?,?,?,?,?,?)`;
-        let values = [salesInvoiceDTO.cedula_emisor,salesInvoiceDTO.fecha,salesInvoiceDTO.nombre_cliente,salesInvoiceDTO.detalles,salesInvoiceDTO.para_llevar,salesInvoiceDTO.estado,salesInvoiceDTO.detalles_factura];
+        let sql    = `CALL guardarFacturaVenta(?,?,?,?,?,?,?,?)`;
+        let values = [salesInvoiceDTO.cedula_emisor,salesInvoiceDTO.fecha,salesInvoiceDTO.nombre_cliente,salesInvoiceDTO.detalles,salesInvoiceDTO.para_llevar,salesInvoiceDTO.estado,salesInvoiceDTO.id_cliente,salesInvoiceDTO.detalles_factura];
 
         connection.query(sql, values ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });
-
+        
     });
 };
 
