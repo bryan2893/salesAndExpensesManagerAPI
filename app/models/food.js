@@ -67,3 +67,17 @@ exports.updateFood = (foodDTO)=>{
         });
     });
 };
+
+exports.getFoodsByCategory = (category)=>{
+    return new Promise((resolve,reject)=>{
+        let sql = `SELECT * FROM productos
+           WHERE categoria = ?`;
+
+        let data = [category];
+
+        connection.query(sql, data ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+    });
+};

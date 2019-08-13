@@ -8,5 +8,6 @@ router.get('/foods/getFood/:foodId',authMiddleware.ensureAuthenticate,foodContro
 router.post('/foods/saveFood',authMiddleware.ensureAuthenticate,foodController.saveFood);
 router.get('/foods/deleteFood/:foodId',authMiddleware.ensureAuthenticate,foodController.deleteFood);
 router.post('/foods/updateFood',authMiddleware.ensureAuthenticate,foodController.updateFood);
+router.get('/foods/getFoodsByCategory/:category',authMiddleware.ensureAuthenticate,foodController.getFoodsByCategory);
 
 module.exports = router;

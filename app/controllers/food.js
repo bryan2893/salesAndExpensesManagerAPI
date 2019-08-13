@@ -57,3 +57,13 @@ exports.updateFood = function(req,res){
     });
 
 };
+
+exports.getFoodsByCategory = function(req,res){
+    let category = req.params.category;
+
+    foodModel.getFoodsByCategory(category).then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+};
