@@ -1,6 +1,5 @@
 class CLIENT{
-    constructor(id,identificacion,nombre_completo,telefono){
-        this.id = id;
+    constructor(identificacion,nombre_completo,telefono){
         this.identificacion = identificacion;
         this.nombre_completo = nombre_completo;
         this.telefono = telefono;

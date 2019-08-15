@@ -9,6 +9,7 @@ exports.getAllSalesInvoice = function(req,res){
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
+
 };
 
 exports.getASaleInvoice = function(req,res){
@@ -235,5 +236,36 @@ exports.updateSaleInvoiceState = function(req,res){
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
-    
+
+};
+
+exports.getSalesInvoiceByClientDateRangeAndPaginate = function(req,res){
+    let clientId = req.params.clientId;
+
+    if(!clientId){
+        return res.status(401).send({message:"Es necesario el parametro id_cliente!"});
+    }
+
+    let page_request = null;
+    let limit = null;
+
+    try{
+        page_request = parseInt(req.params.page_request);
+        limit = parseInt(req.params.limit);
+    }catch(error){
+        return res.status(401).send({message:error.message});
+    }
+
+    let dateFrom = req.params.date_from;
+    let dateTo = req.params.date_to;
+
+    if(dateFrom && dateTo){
+        salesInvoiceModel.getSalesInvoiceByClientDateRangeAndPaginate(clientId,dateFrom,dateTo,page_request,limit).then((result)=>{
+            res.status(200).send(result);
+        }).catch((error)=>{
+            res.status(401).send({message:error.message});
+        });
+    }else{
+        res.status(401).send({message:"Hay un problema con las fechas enviadas!"});
+    }
 };

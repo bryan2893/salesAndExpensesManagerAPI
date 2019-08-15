@@ -10,16 +10,6 @@ exports.getAllClients = function(req,res){
     });
 };
 
-exports.getClient = function(req,res){
-    let id = req.params.clientId;
-    
-    clientModel.getClient(id).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-};
-
 exports.getClientByIdentifier = function(req,res){
 
     let id = req.params.clientIdentifier;
@@ -34,7 +24,7 @@ exports.getClientByIdentifier = function(req,res){
 
 exports.saveClient = function(req,res){
     let bodyData = req.body;
-    let clientDTO = new CLIENT(null,bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
+    let clientDTO = new CLIENT(bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
 
     clientModel.saveClient(clientDTO).then((result)=>{
         res.status(200).send(result);
@@ -59,7 +49,7 @@ exports.deleteClient = function(req,res){
 
 exports.updateClient = function(req,res){
     let bodyData = req.body;
-    let clientDTO = new CLIENT(bodyData.id,bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
+    let clientDTO = new CLIENT(bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
 
     clientModel.updateClient(clientDTO).then((result)=>{
         res.status(200).send(result);

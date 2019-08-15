@@ -17,7 +17,6 @@ let supplie_category_routes = require('./app/routes/supplie_category_routes');
 let sales_invoice_routes = require('./app/routes/sales_invoice');
 let invoice_detail_routes = require('./app/routes/invoice_detail_routes');
 let auth_routes = require('./app/routes/auth_routes');
-let sub_category_product_routes = require('./app/routes/sub_category_product_routes');
 
 //se setean las rutas que el app debe usar.
 app.use(api_routes);
@@ -30,7 +29,6 @@ app.use(supplie_category_routes);
 app.use(sales_invoice_routes);
 app.use(invoice_detail_routes);
 app.use(auth_routes);
-app.use(sub_category_product_routes);
 
 http.createServer(app).listen(confInfo.PORT,function(){
     console.log("Escuchando en el puerto "+confInfo.PORT);

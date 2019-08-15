@@ -15,5 +15,6 @@ router.get('/salesInvoice/getAllSalesInvoiceByEmisorDateRangeAndPagination/:emis
 router.get('/salesInvoice/getSalesInvoiceByStateAndPaginate/:state/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getSalesInvoiceByStateAndPaginate);
 router.get('/salesInvoice/getSalesInvoiceByStateDateRangeAndPaginate/:state/:date_from/:date_to/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getSalesInvoiceByStateDateRangeAndPaginate);
 router.get('/salesInvoice/updateSaleInvoiceState/:num_factura/:state',authMiddleware.ensureAuthenticate,salesInvoiceController.updateSaleInvoiceState);
+router.get('/salesInvoice/getSalesInvoiceByClientDateRangeAndPaginate/:clientId/:date_from/:date_to/:page_request/:limit',authMiddleware.ensureAuthenticate,salesInvoiceController.getSalesInvoiceByClientDateRangeAndPaginate);
 
 module.exports = router;

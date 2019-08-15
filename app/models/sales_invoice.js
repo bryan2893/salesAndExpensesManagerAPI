@@ -232,3 +232,37 @@ exports.updateSaleInvoiceState = (state,num_factura) => {
         
     });
 };
+
+exports.getSalesInvoiceByClientDateRangeAndPaginate = (clientId,date_from,date_to,pageRequest,limit) => {
+
+    return new Promise((resolve,reject)=>{
+
+        if(pageRequest < 1){
+            pageRequest = 1;
+        }
+
+        let offSet = (pageRequest-1) * limit;
+        
+        let dateFrom = null;
+        let dateTo = null;
+        try{
+            dateFrom = new Date(date_from);
+            dateTo = new Date(date_to);
+        }catch(error){
+            reject(new Error(error.message));
+        }
+
+        if(dateFrom > dateTo){
+            reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
+        }
+
+        let sql    = `SELECT * FROM facturas_venta WHERE id_cliente = ? AND (fecha BETWEEN ? AND ?) LIMIT ?,?`;
+
+        connection.query(sql, [clientId,date_from,date_to,offSet,limit] ,function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+
+    });
+    
+};

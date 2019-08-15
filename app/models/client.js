@@ -13,16 +13,6 @@ exports.getAllClients = () => {
     });
 };
 
-exports.getClient = (clientId) => {
-    return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM clientes WHERE id = ' + connection.escape(clientId);
-        connection.query(sql, function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
-        });
-    });
-};
-
 exports.getClientByIdentifier = (clientIdentifier) => {
     return new Promise((resolve,reject)=>{
         let sql    = 'SELECT * FROM clientes WHERE identificacion = ' + connection.escape(clientIdentifier);
@@ -45,11 +35,11 @@ exports.saveClient = (clientDTO)=>{
     });
 };
 
-exports.deleteClient = (clientId)=>{
+exports.deleteClient = (clientIdentifier)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM clientes WHERE id = ?";
+        let sql = "DELETE FROM clientes WHERE identificacion = ?";
 
-        connection.query(sql, clientId ,function (error, results, fields) {
+        connection.query(sql, clientIdentifier ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });
@@ -62,16 +52,16 @@ exports.updateClient = (clientDTO)=>{
     return new Promise((resolve,reject)=>{
         
         let sql = `UPDATE clientes
-            SET identificacion = ?,
            SET nombre_completo = ?,
            telefono = ?
-           WHERE id = ?`;
+           WHERE identificacion = ?`;
 
-        let data = [clientDTO.identificacion,clientDTO.nombre_completo,clientDTO.telefono,clientDTO.id];
+        let data = [clientDTO.nombre_completo,clientDTO.telefono,clientDTO.identificacion];
 
         connection.query(sql, data ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });
+        
     });
 };
