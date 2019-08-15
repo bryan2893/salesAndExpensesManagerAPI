@@ -4,7 +4,6 @@ let WORKER = require('../models/DTO/worker');
 exports.getAllWorkers = function(req,res){
 
     workerModel.getAllWorkers().then((results)=>{
-        console.log(req.worker);
         res.status(200).json(results);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
