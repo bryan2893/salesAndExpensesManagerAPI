@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bryan2893/INVENTORY_MANAGER_API#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "jwt-simple": "^0.5.6",
     "moment": "^2.24.0",

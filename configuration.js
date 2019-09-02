@@ -1,5 +1,5 @@
 const configuration = {
-    PORT : process.env.PORT || 3000,
+    PORT : process.env.PORT || 3001,
     SECRET_TOKEN : process.env.SECRET_TOKEN || "casanueva432128932",
     DB_CREDENTIALS : {
         host: 'localhost',
