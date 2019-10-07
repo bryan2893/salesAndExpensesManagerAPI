@@ -5,7 +5,7 @@ var connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: 'casanueva4321',
+    password: 'casanueva@4321',
     database: 'jehova_jireth_manager',
     insecureAuth: true
 });
