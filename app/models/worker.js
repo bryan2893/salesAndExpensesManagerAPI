@@ -6,7 +6,7 @@ let connection = require('./dbconnection');
 //Extrae todOs los trabajadores registrados...
 exports.getAllWorkers = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores';
+        let sql    = 'SELECT * FROM workers';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -37,14 +37,13 @@ exports.getWorkerByIdAndPassword = (workerId,password) => {
 
 exports.saveWorker = (workerDTO)=>{
     return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO trabajadores (cedula,nombre_completo,fecha_ingreso,admin,password) values ? `;
-        let values = [[workerDTO.cedula,workerDTO.nombre_completo,workerDTO.fecha_ingreso,workerDTO.admin,workerDTO.password]];
+        let sql    = `INSERT INTO workers (workerId,fullName,password,rol) values ? `;
+        let values = [[workerDTO.workerId,workerDTO.fullName,workerDTO.password,workerDTO.rol]];
 
         connection.query(sql, [values] ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(workerDTO);
         });
-
     });
 };
 

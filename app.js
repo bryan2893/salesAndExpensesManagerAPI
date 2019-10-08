@@ -7,7 +7,7 @@ let cors = require('cors');
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:3000'
-  }));
+}));
 //app.use(express.urlencoded());
 
 //Se importan las rutas o endpoints de la api.
@@ -36,6 +36,7 @@ app.use(sales_invoice_routes);
 app.use(invoice_detail_routes);
 app.use(auth_routes);
 
-http.createServer(app).listen(confInfo.PORT,function(){
-    console.log("Escuchando en el puerto "+confInfo.PORT);
+const PORT = process.env.PORT || confInfo.PORT;
+http.createServer(app).listen(PORT,function(){
+    console.log("Escuchando en el puerto "+ PORT);
 });
