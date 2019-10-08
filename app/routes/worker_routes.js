@@ -5,10 +5,10 @@ let authMiddleware = require('../middleware/auth');
 
 //authMiddleware.ensureAuthenticate
 
-router.get('/workers/getAllWorkers',workerController.getAllWorkers);
-router.get('/workers/getWorker/:workerId',authMiddleware.ensureAuthenticate,workerController.getAWorker);
-router.post('/workers/saveWorker',workerController.saveWorker);
-router.get('/workers/deleteWorker/:workerId',authMiddleware.ensureAuthenticate,workerController.deleteWorker);
+router.get('/workers/getAllWorkers',workerController.getAllWorkers);//funciona.
+router.get('/workers/getWorker/:workerId',workerController.getAWorker);//funciona.
+router.post('/workers/saveWorker',workerController.saveWorker);//funciona.
+router.get('/workers/deleteWorker/:workerId',workerController.deleteWorker);//funciona.
 router.post('/workers/updateWorker',authMiddleware.ensureAuthenticate,workerController.updateWorker);
 
 module.exports = router;

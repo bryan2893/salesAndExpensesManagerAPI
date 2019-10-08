@@ -17,7 +17,7 @@ exports.getAllWorkers = () => {
 //Se busca un trabajador especificamente por su id...
 exports.getWorker = (workerId) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores WHERE cedula = ' + connection.escape(workerId);
+        let sql    = 'SELECT * FROM workers WHERE workerId = ' + connection.escape(workerId);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -49,11 +49,14 @@ exports.saveWorker = (workerDTO)=>{
 
 exports.deleteWorker = (workerId)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM trabajadores WHERE cedula = ?";
-
-        connection.query(sql, workerId ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+        this.getWorker(workerId).then((worker)=>{
+            let sql = "DELETE FROM workers WHERE workerId = ?";
+            connection.query(sql, workerId ,function (error, results, fields) {
+                if (error) reject(error);
+                resolve(worker);
+            });
+        }).catch((error)=>{
+            reject(error);
         });
     });
 };

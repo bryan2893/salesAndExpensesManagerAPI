@@ -41,7 +41,7 @@ exports.deleteWorker = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:"Se necesita el id del trabajador para eliminarlo!"});
+        res.status(401).send({message:"workerId is needed!"});
     }
 };
 
