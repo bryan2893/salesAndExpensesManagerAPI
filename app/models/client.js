@@ -5,7 +5,7 @@ let connection = require('./dbconnection');
 
 exports.getAllClients = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM clientes';
+        let sql    = 'SELECT * FROM clients';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -15,7 +15,7 @@ exports.getAllClients = () => {
 
 exports.getClientByIdentifier = (clientIdentifier) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM clientes WHERE identificacion = ' + connection.escape(clientIdentifier);
+        let sql    = 'SELECT * FROM clients WHERE clientId = ' + connection.escape(clientIdentifier);
         connection.query(sql,function (error, result, fields) {
             if (error) reject(error);
             resolve(result);
@@ -25,23 +25,32 @@ exports.getClientByIdentifier = (clientIdentifier) => {
 
 exports.saveClient = (clientDTO)=>{
     return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO clientes (identificacion,nombre_completo,telefono) values ?`;
-        let values = [[clientDTO.identificacion,clientDTO.nombre_completo,clientDTO.telefono]];
+        let sql    = `INSERT INTO clients (clientId,fullName,phoneNumber) values ?`;
+        let values = [[clientDTO.clientId,clientDTO.fullName,clientDTO.phoneNumber]];
 
         connection.query(sql, [values] ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(clientDTO);
         });
     });
 };
 
 exports.deleteClient = (clientIdentifier)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM clientes WHERE identificacion = ?";
+        this.getClientByIdentifier(clientIdentifier).then((client)=>{
 
-        connection.query(sql, clientIdentifier ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+            if(!client.clientId){
+                resolve({"message":"Client not found!"});
+            }
+
+            let sql = "DELETE FROM clients WHERE clientId = ?";
+
+            connection.query(sql, clientIdentifier ,function (error, results, fields) {
+                if (error) reject(error);
+                resolve(client);
+            });
+        }).catch((error)=>{
+            reject(error);
         });
 
     });
@@ -51,16 +60,16 @@ exports.updateClient = (clientDTO)=>{
 
     return new Promise((resolve,reject)=>{
         
-        let sql = `UPDATE clientes
-           SET nombre_completo = ?,
-           telefono = ?
-           WHERE identificacion = ?`;
+        let sql = `UPDATE clients
+           SET fullName = ?,
+           phoneNumber = ?
+           WHERE clientId = ?`;
 
-        let data = [clientDTO.nombre_completo,clientDTO.telefono,clientDTO.identificacion];
+        let data = [clientDTO.fullName,clientDTO.phoneNumber,clientDTO.clientId];
 
         connection.query(sql, data ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(clientDTO);
         });
         
     });

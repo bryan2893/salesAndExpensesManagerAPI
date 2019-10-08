@@ -12,19 +12,19 @@ exports.getAllClients = function(req,res){
 
 exports.getClientByIdentifier = function(req,res){
 
-    let id = req.params.clientIdentifier;
+    let id = req.params.clientId;
     
     clientModel.getClientByIdentifier(id).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
-    
+
 };
 
 exports.saveClient = function(req,res){
     let bodyData = req.body;
-    let clientDTO = new CLIENT(bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
+    let clientDTO = new CLIENT(bodyData.clientId,bodyData.fullName,bodyData.phoneNumber);
 
     clientModel.saveClient(clientDTO).then((result)=>{
         res.status(200).send(result);
@@ -43,13 +43,13 @@ exports.deleteClient = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:"Se necesita el id del cliente para eliminarlo!"});
+        res.status(401).send({message:"clientId param is needed!"});
     }
 };
 
 exports.updateClient = function(req,res){
     let bodyData = req.body;
-    let clientDTO = new CLIENT(bodyData.identificacion,bodyData.nombre_completo,bodyData.telefono);
+    let clientDTO = new CLIENT(bodyData.clientId,bodyData.fullName,bodyData.phoneNumber);
 
     clientModel.updateClient(clientDTO).then((result)=>{
         res.status(200).send(result);

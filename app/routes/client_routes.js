@@ -3,10 +3,12 @@ let clientController = require('../controllers/client');
 let router = express.Router();
 let authMiddleware = require('../middleware/auth');
 
-router.get('/clients/getAllClients',clientController.getAllClients);
-router.get('/clients/getClientByIdentifier/:clientId',authMiddleware.ensureAuthenticate,clientController.getClientByIdentifier);
-router.post('/clients/saveClient',authMiddleware.ensureAuthenticate,clientController.saveClient);
-router.get('/clients/deleteClient/:clientId',authMiddleware.ensureAuthenticate,clientController.deleteClient);
-router.post('/clients/updateClient',authMiddleware.ensureAuthenticate,clientController.updateClient);
+//authMiddleware.ensureAuthenticate
+
+router.get('/clients/getAllClients',clientController.getAllClients);//funciona.
+router.get('/clients/getClientByIdentifier/:clientId',clientController.getClientByIdentifier);//funciona.
+router.post('/clients/saveClient',clientController.saveClient);//funciona
+router.get('/clients/deleteClient/:clientId',clientController.deleteClient);//funciona
+router.post('/clients/updateClient',clientController.updateClient);//funciona.
 
 module.exports = router;
