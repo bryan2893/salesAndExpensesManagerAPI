@@ -3,7 +3,7 @@ informacion relacionada con trabajadores registrados
 */
 let connection = require('./dbconnection');
 
-//Extrae todOs los trabajadores registrados...
+//Extrae todos los trabajadores registrados...
 exports.getAllWorkers = () => {
     return new Promise((resolve,reject)=>{
         let sql    = 'SELECT * FROM workers';
@@ -27,7 +27,7 @@ exports.getWorker = (workerId) => {
 
 exports.getWorkerByIdAndPassword = (workerId,password) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores WHERE cedula = ? AND password = ?';
+        let sql    = 'SELECT * FROM workers WHERE workerId = ? AND password = ?';
         connection.query(sql,[workerId,password],function (error, result, fields) {
             if (error) reject(error);
             resolve(result);
@@ -65,18 +65,17 @@ exports.updateWorker = (workerDTO)=>{
 
     return new Promise((resolve,reject)=>{
         
-        let sql = `UPDATE trabajadores
-           SET nombre_completo = ?,
-           fecha_ingreso = ?,
-           admin = ?,
-           password = ? 
-           WHERE cedula = ?`;
+        let sql = `UPDATE workers
+           SET fullName = ?,
+           password = ?,
+           rol = ? 
+           WHERE workerId = ?`;
 
-        let data = [workerDTO.nombre_completo,workerDTO.fecha_ingreso,workerDTO.admin,workerDTO.password,workerDTO.cedula];
+        let data = [workerDTO.fullName,workerDTO.password,workerDTO.rol,workerDTO.workerId];
 
         connection.query(sql, data ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(workerDTO);
         });
     });
 };
