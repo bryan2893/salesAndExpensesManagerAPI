@@ -14,6 +14,7 @@ app.use(cors({
 let client_routes = require('./app/routes/client_routes');
 let api_routes = require('./app/routes/api_routes');
 let product_routes = require('./app/routes/product_routes');
+let product_variety_routes = require('./app/routes/product_variety_routes');
 let worker_routes = require('./app/routes/worker_routes');
 let product_category_routes = require('./app/routes/product_category_routes');
 let provider_routes = require('./app/routes/provider_routes');
@@ -27,6 +28,7 @@ let auth_routes = require('./app/routes/auth_routes');
 app.use(client_routes);
 app.use(api_routes);
 app.use(product_routes);
+app.use(product_variety_routes);
 app.use(worker_routes);
 app.use(product_category_routes);
 app.use(provider_routes);
