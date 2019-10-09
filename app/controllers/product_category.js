@@ -12,9 +12,9 @@ exports.getAllProductCategories = function(req,res){
 };
 
 exports.getAProductCategory = function(req,res){
-    let code = req.params.categoryCode;
+    let categoryId = req.params.categoryId;
     
-    productCategoryModel.getProductCategory(code).then((result)=>{
+    productCategoryModel.getProductCategory(categoryId).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
@@ -23,7 +23,7 @@ exports.getAProductCategory = function(req,res){
 
 exports.saveProductCategory = function(req,res){
     let bodyData = req.body;
-    let productCategoryDTO = new PRODUCT_CATEGORY(null,bodyData.nombre);
+    let productCategoryDTO = new PRODUCT_CATEGORY(null,bodyData.name);
 
     productCategoryModel.saveProductCategory(productCategoryDTO).then((result)=>{
         res.status(200).send(result);
@@ -33,9 +33,9 @@ exports.saveProductCategory = function(req,res){
 };
 
 exports.deleteProductCategory = function(req,res){
-    let code = req.params.categoryCode;
-    if(code){
-        productCategoryModel.deleteProductCategory(code).then((result)=>{
+    let categoryId = req.params.categoryId;
+    if(categoryId){
+        productCategoryModel.deleteProductCategory(categoryId).then((result)=>{
             res.status(200).send(result);
         }).catch((error)=>{
             res.status(401).send({message:error.message});
@@ -47,11 +47,12 @@ exports.deleteProductCategory = function(req,res){
 
 exports.updateProductCategory = function(req,res){
     let reqBody = req.body;
-    let productCategoryDTO = new PRODUCT_CATEGORY(reqBody.codigo,reqBody.nombre);
+    let productCategoryDTO = new PRODUCT_CATEGORY(reqBody.categoryId,reqBody.name);
 
     productCategoryModel.updateProductCategory(productCategoryDTO).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
+
 };
