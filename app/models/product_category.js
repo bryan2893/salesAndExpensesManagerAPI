@@ -2,7 +2,7 @@ let connection = require('./dbconnection');
 
 exports.getAllProductCategories = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM categoria_producto';
+        let sql    = 'SELECT * FROM productcategories';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -10,53 +10,71 @@ exports.getAllProductCategories = () => {
     });
 };
 
-exports.getProductCategory = (categoryCode) => {
+exports.getProductCategory = (categoryId) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM categoria_producto WHERE codigo = ' + connection.escape(categoryCode);
+        let sql    = 'SELECT * FROM productcategories WHERE categoryId = ' + connection.escape(categoryId);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(results[0]);
         });
     });
 };
 
 exports.saveProductCategory = (productCategoryDTO)=>{
     return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO categoria_producto (nombre) values ? `;
-        let values = [[productCategoryDTO.nombre]];
+        let sql    = `INSERT INTO productcategories (name) values ? `;
+        let values = [[productCategoryDTO.name]];
 
         connection.query(sql, [values] ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            productCategoryDTO.categoryId = results.insertId;
+            resolve(productCategoryDTO);
         });
 
     });
 };
 
-exports.deleteProductCategory  = (categoryCode)=>{
+exports.deleteProductCategory  = (categoryId)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM categoria_producto WHERE codigo = ?";
+        this.getProductCategory(categoryId).then((category)=>{
+            if(category){
+                let sql = "DELETE FROM productcategories WHERE categoryId = ?";
 
-        connection.query(sql, categoryCode ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+                connection.query(sql, categoryId ,function (error, results, fields) {
+                    if (error) reject(error);
+                    resolve(category);
+                });
+            }else{
+                resolve({message:"product category not found!"});
+            }
+        }).catch((error)=>{
+            reject(error);
         });
+
     });
 };
 
 exports.updateProductCategory = (productCategoryDTO)=>{
 
     return new Promise((resolve,reject)=>{
-        
-        let sql = `UPDATE categoria_producto
-           SET nombre = ?
-           WHERE codigo = ?`;
+        this.getProductCategory(productCategoryDTO.categoryId).then((category)=>{
+            if(category){
+                let sql = `UPDATE productcategories
+                SET name = ?
+                WHERE categoryId = ?`;
 
-        let data = [productCategoryDTO.nombre,productCategoryDTO.codigo];
+                let data = [productCategoryDTO.name,productCategoryDTO.categoryId];
 
-        connection.query(sql, data ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+                connection.query(sql, data ,function (error, results, fields) {
+                    if (error) reject(error);
+                    resolve(category);
+                });
+            }else{
+                resolve({message:"category not found!"});
+            }
+        }).catch((error)=>{
+            reject(error);
         });
+
     });
 };

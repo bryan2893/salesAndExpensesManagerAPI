@@ -1,6 +1,6 @@
 //Controladores de lo que tenga que ver con las comidas registradas en la base de datos.
-let salesInvoiceModel = require('../models/sales_invoice');
-let SALE_INVOICE = require('../models/DTO/sales_invoice');
+let salesInvoiceModel = require('../models/sale_invoice');
+let SALE_INVOICE = require('../models/DTO/sale_invoice');
 
 exports.getAllSalesInvoice = function(req,res){
 

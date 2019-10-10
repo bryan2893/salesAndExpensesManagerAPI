@@ -3,10 +3,10 @@ informacion relacionada con trabajadores registrados
 */
 let connection = require('./dbconnection');
 
-//Extrae todOs los trabajadores registrados...
+//Extrae todos los trabajadores registrados...
 exports.getAllWorkers = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores';
+        let sql    = 'SELECT * FROM workers';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -17,7 +17,7 @@ exports.getAllWorkers = () => {
 //Se busca un trabajador especificamente por su id...
 exports.getWorker = (workerId) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores WHERE cedula = ' + connection.escape(workerId);
+        let sql    = 'SELECT * FROM workers WHERE workerId = ' + connection.escape(workerId);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -27,7 +27,7 @@ exports.getWorker = (workerId) => {
 
 exports.getWorkerByIdAndPassword = (workerId,password) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM trabajadores WHERE cedula = ? AND password = ?';
+        let sql    = 'SELECT * FROM workers WHERE workerId = ? AND password = ?';
         connection.query(sql,[workerId,password],function (error, result, fields) {
             if (error) reject(error);
             resolve(result);
@@ -37,24 +37,26 @@ exports.getWorkerByIdAndPassword = (workerId,password) => {
 
 exports.saveWorker = (workerDTO)=>{
     return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO trabajadores (cedula,nombre_completo,fecha_ingreso,admin,password) values ? `;
-        let values = [[workerDTO.cedula,workerDTO.nombre_completo,workerDTO.fecha_ingreso,workerDTO.admin,workerDTO.password]];
+        let sql    = `INSERT INTO workers (workerId,fullName,password,rol) values ? `;
+        let values = [[workerDTO.workerId,workerDTO.fullName,workerDTO.password,workerDTO.rol]];
 
         connection.query(sql, [values] ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(workerDTO);
         });
-
     });
 };
 
 exports.deleteWorker = (workerId)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM trabajadores WHERE cedula = ?";
-
-        connection.query(sql, workerId ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+        this.getWorker(workerId).then((worker)=>{
+            let sql = "DELETE FROM workers WHERE workerId = ?";
+            connection.query(sql, workerId ,function (error, results, fields) {
+                if (error) reject(error);
+                resolve(worker);
+            });
+        }).catch((error)=>{
+            reject(error);
         });
     });
 };
@@ -63,18 +65,17 @@ exports.updateWorker = (workerDTO)=>{
 
     return new Promise((resolve,reject)=>{
         
-        let sql = `UPDATE trabajadores
-           SET nombre_completo = ?,
-           fecha_ingreso = ?,
-           admin = ?,
-           password = ? 
-           WHERE cedula = ?`;
+        let sql = `UPDATE workers
+           SET fullName = ?,
+           password = ?,
+           rol = ? 
+           WHERE workerId = ?`;
 
-        let data = [workerDTO.nombre_completo,workerDTO.fecha_ingreso,workerDTO.admin,workerDTO.password,workerDTO.cedula];
+        let data = [workerDTO.fullName,workerDTO.password,workerDTO.rol,workerDTO.workerId];
 
         connection.query(sql, data ,function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(workerDTO);
         });
     });
 };

@@ -1,10 +1,9 @@
 class WORKER{
-    constructor(cedula,nombre_completo,fecha_ingreso,admin,password){
-        this.cedula = cedula;
-        this.nombre_completo = nombre_completo;
-        this.fecha_ingreso = fecha_ingreso;
-        this.admin = admin;
+    constructor(workerId,fullName,password,rol){
+        this.workerId = workerId;
+        this.fullName = fullName;
         this.password = password;
+        this.rol = rol;
     }
 }
 

@@ -22,7 +22,7 @@ exports.getAWorker = function(req,res){
 
 exports.saveWorker = function(req,res){
     let bodyData = req.body;
-    let workerDTO = new WORKER(bodyData.cedula,bodyData.nombre_completo,bodyData.fecha_ingreso,bodyData.admin,bodyData.password);
+    let workerDTO = new WORKER(bodyData.workerId,bodyData.fullName,bodyData.password,bodyData.rol);
 
     workerModel.saveWorker(workerDTO).then((result)=>{
         res.status(200).send(result);
@@ -41,13 +41,13 @@ exports.deleteWorker = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:"Se necesita el id del trabajador para eliminarlo!"});
+        res.status(401).send({message:"workerId is needed!"});
     }
 };
 
 exports.updateWorker = function(req,res){
     let bodyData = req.body;
-    let workerDTO = new WORKER(bodyData.cedula,bodyData.nombre_completo,bodyData.fecha_ingreso,bodyData.admin,bodyData.password);
+    let workerDTO = new WORKER(bodyData.workerId,bodyData.fullName,bodyData.password,bodyData.rol);
 
     workerModel.updateWorker(workerDTO).then((result)=>{
         res.status(200).send(result);
