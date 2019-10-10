@@ -1,17 +1,8 @@
-/*Se comunican con la base de datos para manipular 
-informacion relacionada con comidas especificamente
-*/
-
-/*
-*****QUERY PARA UTILIZAR LUEGO*****
-SELECT facturas_venta.num_factura,trabajadores.nombre_completo as trabajador,facturas_venta.fecha,facturas_venta.nombre_cliente,faturas_venta.detalles,facturas_venta.para_llevar,facturas_venta.estado'+
-        'FROM facturas_venta INNER JOIN trabajadores WHERE facturas_venta.cedula_emisor = trabajadores.cedula
-*/
 let connection = require('./dbconnection');
 
 exports.getAllSalesInvoice = () => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM facturas_venta';
+        let sql    = 'SELECT * FROM saleinvoices';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -21,7 +12,7 @@ exports.getAllSalesInvoice = () => {
 
 exports.getSaleInvoice = (num_factura) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM facturas_venta WHERE num_factura = ' + connection.escape(num_factura);
+        let sql    = 'SELECT * FROM saleinvoices WHERE invoiceNumber = ' + connection.escape(num_factura);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -33,7 +24,7 @@ exports.saveSaleInvoice = (salesInvoiceDTO)=>{
     //El parametro 'detalles' es un objeto json el cual es una lista de detalles de la factura. 'detalles es pasado'
     //por la funcion JSON.stringify() para que pueda ser reconocido por la base de datos.
     return new Promise((resolve,reject)=>{
-        let sql    = `CALL guardarFacturaVenta(?,?,?,?,?,?,?,?)`;
+        let sql    = `CALL SAVE_SALE_INVOICE(?,?,?,?,?,?,?,?)`;
         let values = [salesInvoiceDTO.cedula_emisor,salesInvoiceDTO.fecha,salesInvoiceDTO.nombre_cliente,salesInvoiceDTO.detalles,salesInvoiceDTO.para_llevar,salesInvoiceDTO.estado,salesInvoiceDTO.id_cliente,salesInvoiceDTO.detalles_factura];
 
         connection.query(sql, values ,function (error, results, fields) {
@@ -46,7 +37,7 @@ exports.saveSaleInvoice = (salesInvoiceDTO)=>{
 
 exports.deleteSaleInvoice = (num_factura)=>{
     return new Promise((resolve,reject)=>{
-        let sql = "DELETE FROM facturas_venta WHERE num_factura = ?";
+        let sql = "DELETE FROM saleinvoices WHERE invoiceNumber = ?";
 
         connection.query(sql, num_factura ,function (error, results, fields) {
             if (error) reject(error);
@@ -70,7 +61,7 @@ exports.getAllSalesInvoiceByPagination = (pageRequest,limit)=>{
 
         let offSet = (pageRequest-1) * limit;
 
-        let sql = "SELECT * FROM facturas_venta LIMIT ?,?";
+        let sql = "SELECT * FROM saleinvoices LIMIT ?,?";
 
         connection.query(sql, [offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -101,7 +92,7 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = (date_from,date_to,pageRequ
             reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
         }
 
-        let sql = `SELECT * FROM facturas_venta WHERE fecha BETWEEN ? AND ? LIMIT ?,?`;
+        let sql = `SELECT * FROM saleinvoices WHERE date BETWEEN ? AND ? LIMIT ?,?`;
 
         connection.query(sql, [date_from,date_to,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -119,7 +110,7 @@ exports.getAllSalesInvoiceByEmisorAndPagination = (emisor_id,pageRequest,limit)=
 
         let offSet = (pageRequest-1) * limit;
 
-        let sql = `SELECT * FROM facturas_venta WHERE cedula_emisor = ? LIMIT ?,?`;
+        let sql = `SELECT * FROM saleinvoices WHERE workerId = ? LIMIT ?,?`;
 
         connection.query(sql, [emisor_id,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -149,7 +140,7 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = (emisor_id,date_from,
             reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
         }
 
-        let sql = `SELECT * FROM facturas_venta WHERE cedula_emisor = ? AND (fecha BETWEEN ? AND ?) LIMIT ?,?`;
+        let sql = `SELECT * FROM saleinvoices WHERE workerId = ? AND (date BETWEEN ? AND ?) LIMIT ?,?`;
 
         connection.query(sql, [emisor_id,date_from,date_to,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -161,7 +152,7 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = (emisor_id,date_from,
 
 exports.getSalesInvoiceByState = (state) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM facturas_venta WHERE estado = ' + connection.escape(state);
+        let sql    = 'SELECT * FROM saleinvoices WHERE pending = ' + connection.escape(state);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -178,7 +169,7 @@ exports.getSalesInvoiceByStateAndPaginate = (state,pageRequest,limit) => {
 
         let offSet = (pageRequest-1) * limit;
 
-        let sql    = `SELECT * FROM facturas_venta WHERE estado = ? LIMIT ?,?`;
+        let sql    = `SELECT * FROM saleinvoices WHERE pending = ? LIMIT ?,?`;
 
         connection.query(sql, [state,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -210,7 +201,7 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pa
             reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
         }
 
-        let sql    = `SELECT * FROM facturas_venta WHERE estado = ? AND (fecha BETWEEN ? AND ?) LIMIT ?,?`;
+        let sql    = `SELECT * FROM saleinvoices WHERE pending = ? AND (date BETWEEN ? AND ?) LIMIT ?,?`;
 
         connection.query(sql, [state,dateFrom,dateTo,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
@@ -223,7 +214,7 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pa
 exports.updateSaleInvoiceState = (state,num_factura) => {
     return new Promise((resolve,reject)=>{
 
-        let sql    = `UPDATE facturas_venta SET estado = ? WHERE num_factura = ?`;
+        let sql    = `UPDATE saleinvoices SET pending = ? WHERE invoiceNumber = ?`;
 
         connection.query(sql, [state,num_factura] ,function (error, results, fields) {
             if (error) reject(error);
@@ -256,7 +247,7 @@ exports.getSalesInvoiceByClientDateRangeAndPaginate = (clientId,date_from,date_t
             reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
         }
 
-        let sql    = `SELECT * FROM facturas_venta WHERE id_cliente = ? AND (fecha BETWEEN ? AND ?) LIMIT ?,?`;
+        let sql    = `SELECT * FROM saleinvoices WHERE clientId = ? AND (date BETWEEN ? AND ?) LIMIT ?,?`;
 
         connection.query(sql, [clientId,date_from,date_to,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
