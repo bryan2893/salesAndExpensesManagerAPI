@@ -75,7 +75,7 @@ exports.getSalesInvoiceByPagination = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:"Se necesita el numero de pagina y el limite por pagina para realizar la consulta!"});
+        res.status(401).send({message:"page_request and limit params are needed!"});
     }
 };
 
@@ -108,12 +108,12 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = function(req,res){
 
 exports.getAllSalesInvoiceByEmisorAndPagination = function(req,res){
     //emisor_id,pageRequest,limit
-    let emisor_id = req.params.emisor_id;
+    let workerId = req.params.workerId;
     let page_request = null;
     let limit = null;
 
-    if(!emisor_id){
-        res.status(401).send({message:"Es necesario la cedula del trabajador para realizar la consulta!"});
+    if(!workerId){
+        res.status(401).send({message:"workerId is necesary!"});
     }
 
     try{
@@ -123,18 +123,18 @@ exports.getAllSalesInvoiceByEmisorAndPagination = function(req,res){
         return res.status(401).send({message:error.message});
     }
 
-    salesInvoiceModel.getAllSalesInvoiceByEmisorAndPagination(emisor_id,page_request,limit).then((result)=>{
+    salesInvoiceModel.getAllSalesInvoiceByEmisorAndPagination(workerId,page_request,limit).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
+
 };
 
 exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = function(req,res){
-    let emisor_id = req.params.emisor_id;
-
-    if(!emisor_id){
-        return res.status(401).send({message:"Es necesario la cedula del trabajador para realizar la consulta!"});
+    let workerId = req.params.workerId;
+    if(!workerId){
+        return res.status(401).send({message:"workerId is necesary!"});
     }
 
     let page_request = null;
@@ -150,7 +150,7 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = function(req,res){
     let dateFrom = req.params.date_from;
     let dateTo = req.params.date_to;
 
-    salesInvoiceModel.getAllSalesInvoiceByEmisorDateRangeAndPagination(emisor_id,dateFrom,dateTo,page_request,limit).then((result)=>{
+    salesInvoiceModel.getAllSalesInvoiceByEmisorDateRangeAndPagination(workerId,dateFrom,dateTo,page_request,limit).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
@@ -177,10 +177,10 @@ exports.countInvoices = function(req,res){
 };
 
 exports.getSalesInvoiceByStateAndPaginate = function(req,res){
-    let estado = req.params.state;
+    let state = req.params.state;
 
-    if(!estado){
-        return res.status(401).send({message:"Es necesario el parámetro estado!"});
+    if(!state){
+        return res.status(401).send({message:"state param is necesary!"});
     }
 
     let page_request = null;
@@ -193,7 +193,7 @@ exports.getSalesInvoiceByStateAndPaginate = function(req,res){
         return res.status(401).send({message:error.message});
     }
 
-    salesInvoiceModel.getSalesInvoiceByStateAndPaginate(estado,page_request,limit).then((result)=>{
+    salesInvoiceModel.getSalesInvoiceByStateAndPaginate(state,page_request,limit).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
@@ -206,7 +206,7 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = function(req,res){
     let state = req.params.state;
 
     if(!state){
-        return res.status(401).send({message:"Es necesario el parametro estado!"});
+        return res.status(401).send({message:"state param is necesary!"});
     }
 
     let page_request = null;
@@ -232,14 +232,14 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = function(req,res){
 };
 
 exports.updateSaleInvoiceState = function(req,res){
-    let state = req.params.state;
-    let num_factura = req.params.num_factura;
+    let newState = req.params.newState;
+    let invoiceNumber = req.params.invoiceNumber;
 
-    if(!state || !num_factura){
-        return res.status(401).send({message:"Es necesario el parametro 'estado' y el parametro 'num_factura' !"});
+    if(!newState || !invoiceNumber){
+        return res.status(401).send({message:"param state and invoiceNumber are needed!"});
     }
 
-    salesInvoiceModel.updateSaleInvoiceState(state,num_factura).then((result)=>{
+    salesInvoiceModel.updateSaleInvoiceState(newState,invoiceNumber).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
@@ -251,7 +251,7 @@ exports.getSalesInvoiceByClientDateRangeAndPaginate = function(req,res){
     let clientId = req.params.clientId;
 
     if(!clientId){
-        return res.status(401).send({message:"Es necesario el parametro id_cliente!"});
+        return res.status(401).send({message:"clientId is required!"});
     }
 
     let page_request = null;
@@ -274,6 +274,6 @@ exports.getSalesInvoiceByClientDateRangeAndPaginate = function(req,res){
             res.status(401).send({message:error.message});
         });
     }else{
-        res.status(401).send({message:"Hay un problema con las fechas enviadas!"});
+        res.status(401).send({message:"There is a problem with sended dates!"});
     }
 };

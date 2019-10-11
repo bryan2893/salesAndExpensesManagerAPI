@@ -12,10 +12,10 @@ exports.getAllSalesInvoice = () => {
 
 exports.getSaleInvoice = (invoiceNumber) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM saleinvoices WHERE invoiceNumber = ' + connection.escape(invoiceNumber);
+        let sql    = 'SELECT * FROM saleinvoices WHERE invoiceNumber = ' + connection.escape(invoiceNumber) + 'LIMIT 1';
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
-            resolve(results);
+            resolve(results[0]);
         });
     });
 };
@@ -47,17 +47,13 @@ exports.deleteSaleInvoice = (num_factura)=>{
     });
 };
 
-/*
-Para obtener el numero de páginas se divide la 'cantidad total de registros' / 'cantidad por página'.
-si hay residuo en la division se debe sumar una página mas.
-*/
 exports.getAllSalesInvoiceByPagination = (pageRequest,limit)=>{
     return new Promise((resolve,reject)=>{
         if(pageRequest < 1){
             pageRequest = 1;
         }
         if(pageRequest < 1){
-            reject(new Error("El limite de registros debe ser 1 o mayor a 1 !"));
+            reject(new Error("limit must be 1 or biggest!"));
         }
 
         let offSet = (pageRequest-1) * limit;
@@ -90,7 +86,7 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = (date_from,date_to,pageRequ
         }
 
         if(dateFrom > dateTo){
-            reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
+            reject(new Error("date_from must be smaller than date_to!"));
         }
 
         let sql = `SELECT * FROM saleinvoices WHERE date BETWEEN ? AND ? LIMIT ?,?`;
@@ -103,7 +99,7 @@ exports.getAllSalesInvoiceByDateRangeAndPagination = (date_from,date_to,pageRequ
     });
 };
 
-exports.getAllSalesInvoiceByEmisorAndPagination = (emisor_id,pageRequest,limit)=>{
+exports.getAllSalesInvoiceByEmisorAndPagination = (workerId,pageRequest,limit)=>{
     return new Promise((resolve,reject)=>{
         if(pageRequest < 1){
             pageRequest = 1;
@@ -113,7 +109,7 @@ exports.getAllSalesInvoiceByEmisorAndPagination = (emisor_id,pageRequest,limit)=
 
         let sql = `SELECT * FROM saleinvoices WHERE workerId = ? LIMIT ?,?`;
 
-        connection.query(sql, [emisor_id,offSet,limit] ,function (error, results, fields) {
+        connection.query(sql, [workerId,offSet,limit] ,function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
         });
@@ -210,7 +206,7 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pa
         }
 
         if(dateFrom > dateTo){
-            reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
+            reject(new Error("first date must be bigger than second"));
         }
 
         let sql    = `SELECT * FROM saleinvoices WHERE pending = ? AND (date BETWEEN ? AND ?) LIMIT ?,?`;
@@ -219,20 +215,28 @@ exports.getSalesInvoiceByStateDateRangeAndPaginate = (state,date_from,date_to,pa
             if (error) reject(error);
             resolve(results);
         });
-        
+
     });
 };
 
-exports.updateSaleInvoiceState = (state,num_factura) => {
+exports.updateSaleInvoiceState = (state,invoiceNumber) => {
     return new Promise((resolve,reject)=>{
 
-        let sql    = `UPDATE saleinvoices SET pending = ? WHERE invoiceNumber = ?`;
+        this.getSaleInvoice(invoiceNumber).then((invoiceObject)=>{
+            if(invoiceObject){
+                let sql    = `UPDATE saleinvoices SET pending = ? WHERE invoiceNumber = ?`;
 
-        connection.query(sql, [state,num_factura] ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+                connection.query(sql, [state,invoiceNumber] ,function (error, results, fields) {
+                    if (error) reject(error);
+                    resolve(invoiceObject);
+                });
+            }else{
+                resolve({message:"invoiceNumber no match!"});
+            }
+        }).catch((error)=>{
+            reject(error);
         });
-        
+
     });
 };
 
@@ -256,7 +260,7 @@ exports.getSalesInvoiceByClientDateRangeAndPaginate = (clientId,date_from,date_t
         }
 
         if(dateFrom > dateTo){
-            reject(new Error("Asegurese que la primer fecha sea menor a la segunda en el url!"));
+            reject(new Error("fist date must be smaller than second!"));
         }
 
         let sql    = `SELECT * FROM saleinvoices WHERE clientId = ? AND (date BETWEEN ? AND ?) LIMIT ?,?`;
