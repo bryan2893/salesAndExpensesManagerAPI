@@ -8,8 +8,9 @@ let authMiddleware = require('../middleware/auth');
 router.get('/salesInvoice/getAllSaleInvoices',salesInvoiceController.getAllSalesInvoice);//funciona.
 router.get('/salesInvoice/getSaleInvoice/:invoiceNumber',salesInvoiceController.getASaleInvoice);//funciona.
 router.post('/salesInvoice/saveSaleInvoice',salesInvoiceController.saveSaleInvoice);//funciona.
-router.get('/salesInvoice/getSalesInvoiceByState/:state',salesInvoiceController.getSalesInvoiceByState);
+router.get('/salesInvoice/getSalesInvoiceByState/:state',salesInvoiceController.getSalesInvoiceByState);//funciona.
 router.get('/salesInvoice/deleteSaleInvoice/:invoiceNumber',salesInvoiceController.deleteSaleInvoice);
+router.get('/salesInvoice/count',salesInvoiceController.countInvoices);//funciona.
 router.get('/salesInvoice/getAllSalesInvoiceByPagination/:page_request/:limit',salesInvoiceController.getSalesInvoiceByPagination);
 router.get('/salesInvoice/getAllSalesInvoiceByDateRangeAndPagination/:date_from/:date_to/:page_request/:limit',salesInvoiceController.getAllSalesInvoiceByDateRangeAndPagination);
 router.get('/salesInvoice/getAllSalesInvoiceByEmisorAndPagination/:emisor_id/:page_request/:limit',salesInvoiceController.getAllSalesInvoiceByEmisorAndPagination);

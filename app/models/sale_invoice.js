@@ -10,9 +10,9 @@ exports.getAllSalesInvoice = () => {
     });
 };
 
-exports.getSaleInvoice = (num_factura) => {
+exports.getSaleInvoice = (invoiceNumber) => {
     return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM saleinvoices WHERE invoiceNumber = ' + connection.escape(num_factura);
+        let sql    = 'SELECT * FROM saleinvoices WHERE invoiceNumber = ' + connection.escape(invoiceNumber);
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
@@ -157,6 +157,17 @@ exports.getSalesInvoiceByState = (state) => {
         connection.query(sql, function (error, results, fields) {
             if (error) reject(error);
             resolve(results);
+        });
+    });
+};
+
+
+exports.countInvoices = () => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT COUNT(*) as invoicesQuantity FROM saleinvoices';
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results[0]);
         });
     });
 };

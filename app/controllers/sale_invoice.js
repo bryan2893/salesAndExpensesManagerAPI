@@ -158,13 +158,22 @@ exports.getAllSalesInvoiceByEmisorDateRangeAndPagination = function(req,res){
 };
 
 exports.getSalesInvoiceByState = function(req,res){
-    let estado = req.params.state;
+    let state = req.params.state;
     
-    salesInvoiceModel.getSalesInvoiceByState(estado).then((result)=>{
+    salesInvoiceModel.getSalesInvoiceByState(state).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
-    });
+    });  
+};
+
+exports.countInvoices = function(req,res){
+    
+    salesInvoiceModel.countInvoices().then((result)=>{
+        res.status(200).send(result);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });  
 };
 
 exports.getSalesInvoiceByStateAndPaginate = function(req,res){
