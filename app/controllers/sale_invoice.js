@@ -13,9 +13,9 @@ exports.getAllSalesInvoice = function(req,res){
 };
 
 exports.getASaleInvoice = function(req,res){
-    let num_factura = req.params.num_factura;
+    let invoiceNumber = req.params.invoiceNumber;
     
-    salesInvoiceModel.getSaleInvoice(num_factura).then((result)=>{
+    salesInvoiceModel.getSaleInvoice(invoiceNumber).then((result)=>{
         res.status(200).send(result);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
@@ -24,18 +24,17 @@ exports.getASaleInvoice = function(req,res){
 
 exports.saveSaleInvoice = function(req,res){
 
-    let cedula_emisor = req.worker.sub;
+    //let workerId = req.worker.sub;
 
     let bodyData = req.body;
     //el atributo detalles es un arreglo de objetos JSON los cuales representan las filas o detalles de una factura.
-    var detalles_factura = null;
+    var invoiceDetails = null;
     try{
-        detalles_factura = JSON.stringify(bodyData.detalles_factura);
+        invoiceDetails = JSON.stringify(bodyData.invoiceDetails);
     }catch(error){
         return res.status(401).send({message:error.message});
     }
-
-    let saleInvoiceDTO = new SALE_INVOICE(null,cedula_emisor,bodyData.fecha,bodyData.nombre_cliente,bodyData.detalles_extra,bodyData.para_llevar,bodyData.estado,bodyData.id_cliente,detalles_factura);
+    let saleInvoiceDTO = new SALE_INVOICE(null,bodyData.workerId,null,bodyData.toCarryOut,bodyData.pending,bodyData.clientId,bodyData.clientName,invoiceDetails);
 
     salesInvoiceModel.saveSaleInvoice(saleInvoiceDTO).then((result)=>{
         res.status(200).send(result);

@@ -1,5 +1,5 @@
 class SALE_INVOICE{
-    constructor(invoiceNumber,workerId,date,toCarryOut,pending,clientId,clientName){
+    constructor(invoiceNumber,workerId,date,toCarryOut,pending,clientId,clientName,invoiceDetails){
         this.invoiceNumber = invoiceNumber;
         this.workerId = workerId;
         this.date = date;
@@ -7,6 +7,7 @@ class SALE_INVOICE{
         this.pending = pending;//Por ejemplo un cliente puede pedir que no le coloquen tomate a una hamburguesa.
         this.clientId = clientId;
         this.clientName = clientName;
+        this.invoiceDetails = invoiceDetails;
     }
 }
 

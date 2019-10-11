@@ -5,9 +5,9 @@ let authMiddleware = require('../middleware/auth');
 
 //authMiddleware.ensureAuthenticate
 
-router.get('/salesInvoice/getAllSaleInvoices',salesInvoiceController.getAllSalesInvoice);
-router.get('/salesInvoice/getSaleInvoice/:invoiceNumber',salesInvoiceController.getASaleInvoice);
-router.post('/salesInvoice/saveSaleInvoice',salesInvoiceController.saveSaleInvoice);
+router.get('/salesInvoice/getAllSaleInvoices',salesInvoiceController.getAllSalesInvoice);//funciona.
+router.get('/salesInvoice/getSaleInvoice/:invoiceNumber',salesInvoiceController.getASaleInvoice);//funciona.
+router.post('/salesInvoice/saveSaleInvoice',salesInvoiceController.saveSaleInvoice);//funciona.
 router.get('/salesInvoice/getSalesInvoiceByState/:state',salesInvoiceController.getSalesInvoiceByState);
 router.get('/salesInvoice/deleteSaleInvoice/:invoiceNumber',salesInvoiceController.deleteSaleInvoice);
 router.get('/salesInvoice/getAllSalesInvoiceByPagination/:page_request/:limit',salesInvoiceController.getSalesInvoiceByPagination);
