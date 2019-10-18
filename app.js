@@ -41,5 +41,5 @@ app.use(auth_routes);
 const PORT = process.env.PORT || confInfo.PORT;
 
 http.createServer(app).listen(PORT,function(){
-    console.log("Escuchando en el puerto "+ PORT);
+    console.log("Listening on port "+ PORT);
 });
