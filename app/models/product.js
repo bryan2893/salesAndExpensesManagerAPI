@@ -86,13 +86,13 @@ exports.updateProduct = (productDTO)=>{
 
 };
 
-exports.getProductsByCategory = (category)=>{
+exports.getProductsByCategory = (categoryId)=>{
 
     return new Promise((resolve,reject)=>{
         let sql = `SELECT * FROM products
-           WHERE category = ?`;
+           WHERE categoryId = ?`;
 
-        let data = [category];
+        let data = [categoryId];
 
         connection.query(sql, data ,function (error, results, fields) {
             if (error) reject(error);

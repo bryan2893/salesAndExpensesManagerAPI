@@ -22,6 +22,17 @@ exports.getProductVariety = (varietyId) => {
     });
 };
 
+//Se busca un producto especificamente por su id...
+exports.getProductVarietiesOfAproduct = (productId) => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM productvarieties WHERE productId = ' + connection.escape(productId);
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        });
+    });
+};
+
 exports.saveProductVariety = (productVarietyDTO)=>{
     return new Promise((resolve,reject)=>{
         let sql    = `INSERT INTO productvarieties (productId,name,price) values ? `;
