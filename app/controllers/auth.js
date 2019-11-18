@@ -12,9 +12,10 @@ exports.auth = function(req,res){
         if(worker){
             return res.status(200).send({token:tokenCreatorService.createToken(worker)});
         }else{
-            return res.status(401).send({mensaje:"Credenciales inválidas!"});
+            return res.status(401).send({message:"Credenciales inválidas!"});
         }
     }).catch(function(error){
-        return res.status(500).send({mensaje:error.message});
+        return res.status(500).send({message:error.message});
     });
+    
 };

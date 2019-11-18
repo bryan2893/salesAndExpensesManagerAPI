@@ -21,6 +21,17 @@ exports.getAProductVariety = function(req,res){
     });
 };
 
+exports.getProductVarietiesOfAproduct = function(req,res){
+    let productId = req.params.productId;
+
+    productVarietyModel.getProductVarietiesOfAproduct(productId).then((results)=>{
+        res.status(200).json(results);
+    }).catch((error)=>{
+        res.status(401).send({message:error.message});
+    });
+    
+};
+
 exports.saveProductVariety = function(req,res){
     let bodyData = req.body;
     let productVarietyDTO = new PRODUCTVARIETY(null,bodyData.productId,bodyData.name,bodyData.price);

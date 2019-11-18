@@ -14,12 +14,12 @@ El objeto trabajador tiene esta estructura:
 */
 exports.createToken = function(worker){
     let payload = {
-        sub: worker.cedula,
-        name: worker.nombre_completo,
-        admin: worker.admin,
+        sub: worker.workerId,
+        name: worker.fullName,
+        rol: worker.rol,
         iat: moment.unix(),
         exp: moment().add(1,"days").unix()
     };
 
-    return jwt.encode(payload, configFile.SECRET_TOKEN); //retorna los datos anteriores codificados.
+    return jwt.encode(payload, configFile.SECRET_TOKEN); //retorna los datos del payload codificados.
 }
