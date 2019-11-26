@@ -1,59 +1,94 @@
 let clientModel = require('../models/client');
-let CLIENT = require('../models/DTO/client');
 
 exports.getAllClients = function(req,res){
-
-    clientModel.getAllClients().then((results)=>{
-        res.status(200).json(results);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
+    clientModel.getAllClients().then((clients)=>{
+        res.status(200).send(clients);
+    }).catch((error) => {
+        res.status(400).send({status:400,message:"Error: "+error.message});
     });
 };
 
-exports.getClientByIdentifier = function(req,res){
+
+exports.getClientById = function(req,res){
 
     let id = req.params.clientId;
-    
-    clientModel.getClientByIdentifier(id).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-
-};
-
-exports.saveClient = function(req,res){
-    let bodyData = req.body;
-    let clientDTO = new CLIENT(bodyData.clientId,bodyData.fullName,bodyData.phoneNumber);
-
-    clientModel.saveClient(clientDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
+    if(id){
+        clientModel.getClientById(id).then((client)=>{
+            if(client){
+                return res.status(200).send({status:200,client:client});
+            }else{
+                return res.status(400).send({status:200,message:"Cliente no encontrado."});
+            }
+        }).catch((error)=>{
+            return res.status(400).send({status:400,message:"Error: "+error.message});
+        });
+    }else{
+        return res.status(400).send({status:400,message:"Id de cliente es requerido."});
+    }
 
 };
 
 exports.deleteClient = function(req,res){
     let id = req.params.clientId;
     if(id){
-        clientModel.deleteClient(id).then((result)=>{
-            res.status(200).send(result);
-        }).catch((error)=>{
-            res.status(401).send({message:error.message});
+        clientModel.getClientById(id).then((client) => {
+            if(client){
+                clientModel.deleteClient(id).then((result)=>{
+                    if(result){
+                        res.status(200).send({status:200,result:result});
+                    }else{
+                        res.status(400).send({status:400,message:"Accion ejecutada pero no hubieron cambios."});
+                    }
+                }).catch((error)=>{
+                    res.status(400).send({status:400,message:"Error: "+error.message});
+                });
+            }else{
+                res.status(400).send({status:400,message:"Cliente no encontrado."});
+            }
         });
     }else{
-        res.status(401).send({message:"clientId param is needed!"});
+        res.status(400).send({status:400,message:"Cédula de cliente es requerido."});
     }
 };
 
-exports.updateClient = function(req,res){
+exports.createClient = function(req,res){
     let bodyData = req.body;
-    let clientDTO = new CLIENT(bodyData.clientId,bodyData.fullName,bodyData.phoneNumber);
 
-    clientModel.updateClient(clientDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
+    if(bodyData){
+        clientModel.createClient(bodyData).then((result)=>{
+            res.status(200).send({status:200,client:result});
+        }).catch((error)=>{
+            res.status(400).send({status:400,message:error.message});
+        });
+    }else{
+        res.status(400).send({status:400,message:"Datos del cliente son necesarios."});
+    }
+};
+
+
+exports.updateClient = function(req,res){
+    let id = req.params.clientId;
+    let newClientInfo = req.body;
+    if(id){
+        //find if Client exist...
+        clientModel.getClientById(id).then((client) => {
+            if(client){
+                clientModel.updateClient(id,newClientInfo).then((result)=>{
+                    if(result[0]){
+                        res.status(200).send({status:200,result:result[0]});
+                    }else{
+                        res.status(400).send({status:400,message:"Accion ejecutada pero no se hicieron cambios."});
+                    }
+                }).catch((error)=>{
+                    res.send(400,{status:400,message:error.message});
+                });    
+            }else{
+                res.send(400,{status:400,message:"Cliente no encontrado."});
+            }
+        }).catch((error) => {
+            res.send(400,{status:400,message:error.message});
+        });
+    }else{
+        res.send(400,{status:400,message:"Se requiere el identificador de cliente"});
+    }
 };

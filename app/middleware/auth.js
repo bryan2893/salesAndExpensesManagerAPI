@@ -21,7 +21,6 @@ exports.ensureAuthenticate = function(req,res,next){
         return res.status(401).send({mensaje:"El token ha expirado!"});
     }
 
-    //This object can be reached from req variable in the correspond controller function.
-    req.worker = payload; //se pasa al objeto req el id del usuario que se decodifico del token.
+    req.worker = payload;
     next();
 }
