@@ -1,8 +1,6 @@
 let jwt = require('jwt-simple');
 let moment = require('moment');
 
-let configFile = require('../../configuration');
-
 exports.ensureAuthenticate = function(req,res,next){
     if(!req.headers.authorization){
         return res.status(403).send({mensaje:"Peticion sin cabecera de autorización!"});
@@ -11,7 +9,7 @@ exports.ensureAuthenticate = function(req,res,next){
     let token = req.headers.authorization;
     let payload = null;
     try{
-        payload = jwt.decode(token, configFile.SECRET_TOKEN);
+        payload = jwt.decode(token, process.env.SECRET);
     }catch(error){
         return res.status(403).send({mensaje:error.message});
     }
@@ -21,7 +19,6 @@ exports.ensureAuthenticate = function(req,res,next){
         return res.status(401).send({mensaje:"El token ha expirado!"});
     }
 
-    //This object can be reached from req variable in the correspond controller function.
-    req.worker = payload; //se pasa al objeto req el id del usuario que se decodifico del token.
+    req.worker = payload;
     next();
 }
