@@ -7,8 +7,8 @@ let authMiddleware = require('../middleware/auth');
 
 router.get('/workers/getAllWorkers',workerController.getAllWorkers);//funciona.
 router.get('/workers/getWorker/:workerId',workerController.getAWorker);//funciona.
-router.post('/workers/saveWorker',workerController.saveWorker);//funciona.
-router.get('/workers/deleteWorker/:workerId',workerController.deleteWorker);//funciona.
-router.post('/workers/updateWorker',workerController.updateWorker);//funciona.
+router.put('/workers/createWorker',workerController.createWorker);//funciona.
+router.delete('/workers/deleteWorker/:workerId',workerController.deleteWorker);//funciona.
+router.put('/workers/updateWorker/:workerId',workerController.updateWorker);//funciona.
 
 module.exports = router;

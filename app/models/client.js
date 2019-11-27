@@ -1,76 +1,59 @@
-/*Se comunican con la base de datos para manipular 
-informacion relacionada con trabajadores registrados
-*/
-let connection = require('./dbconnection');
+let dbObject = require('./dbconnection');
+const clientModel = dbObject.Client;
 
-exports.getAllClients = () => {
-    return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM clients';
-        connection.query(sql, function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
-        });
-    });
-};
 
-exports.getClientByIdentifier = (clientIdentifier) => {
-    return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM clients WHERE clientId = ' + connection.escape(clientIdentifier);
-        connection.query(sql,function (error, result, fields) {
-            if (error) reject(error);
-            resolve(result);
-        });
-    });
-};
-
-exports.saveClient = (clientDTO)=>{
-    return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO clients (clientId,fullName,phoneNumber) values ?`;
-        let values = [[clientDTO.clientId,clientDTO.fullName,clientDTO.phoneNumber]];
-
-        connection.query(sql, [values] ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(clientDTO);
-        });
-    });
-};
-
-exports.deleteClient = (clientIdentifier)=>{
-    return new Promise((resolve,reject)=>{
-        this.getClientByIdentifier(clientIdentifier).then((client)=>{
-
-            if(!client.clientId){
-                resolve({"message":"Client not found!"});
-            }
-
-            let sql = "DELETE FROM clients WHERE clientId = ?";
-
-            connection.query(sql, clientIdentifier ,function (error, results, fields) {
-                if (error) reject(error);
-                resolve(client);
-            });
+exports.getAllClients = function(){
+    return new Promise((resolve,reject) => {
+        clientModel.findAll().then((clients) => {
+            resolve(clients);
         }).catch((error)=>{
             reject(error);
         });
-
     });
 };
 
-exports.updateClient = (clientDTO)=>{
-
-    return new Promise((resolve,reject)=>{
-        
-        let sql = `UPDATE clients
-           SET fullName = ?,
-           phoneNumber = ?
-           WHERE clientId = ?`;
-
-        let data = [clientDTO.fullName,clientDTO.phoneNumber,clientDTO.clientId];
-
-        connection.query(sql, data ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(clientDTO);
+exports.getClientById = function(id){
+    return new Promise((resolve,reject) => {
+        clientModel.findByPk(id).then((client) => {
+            resolve(client);
+        }).catch((error)=>{
+            reject(error);
         });
-        
+    });
+};
+
+exports.deleteClient = function(id){
+    return new Promise((resolve,reject) => {
+        clientModel.destroy({
+            where: {
+                clientId: id
+            }
+          }).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
+        });
+    });
+};
+
+exports.createClient = function(clientInfo){
+    return new Promise((resolve,reject) => {
+        clientModel.create(clientInfo).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
+        });
+    });
+};
+
+exports.updateClient = function(clientId,clientInfo){
+    return new Promise((resolve,reject) => {
+        clientModel.update(clientInfo,{
+            where: {clientId: clientId}
+        }).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
+        });
     });
 };

@@ -1,57 +1,84 @@
 let workerModel = require('../models/worker');
-let WORKER = require('../models/DTO/worker');
 
 exports.getAllWorkers = function(req,res){
 
-    workerModel.getAllWorkers().then((results)=>{
-        res.status(200).json(results);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
+    workerModel.getAllWorkers().then((workers)=>{
+        res.status(200).send(workers);
+    }).catch((error) => {
+        res.status(400).send({status:400,message:"Error: "+error.message});
     });
+
 };
 
 exports.getAWorker = function(req,res){
     let id = req.params.workerId;
-    
-    workerModel.getWorker(id).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
+    if(id){
+        workerModel.getWorker(id).then((worker)=>{
+            if(worker){
+                return res.status(200).send({status:200,worker:worker});
+            }else{
+                return res.status(400).send({status:400,message:"No se encontró el trabajador"});
+            }
+        }).catch((error)=>{
+            return res.status(400).send({status:400,message:"Error: "+error.message});
+        });
+    }else{
+        return res.status(400).send({status:400,message:"Id de trabajador es requerido."});
+    }
 };
 
-exports.saveWorker = function(req,res){
+
+exports.createWorker = function(req,res){
     let bodyData = req.body;
-    let workerDTO = new WORKER(bodyData.workerId,bodyData.fullName,bodyData.password,bodyData.rol);
 
-    workerModel.saveWorker(workerDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-
+    if(bodyData){
+        workerModel.createWorker(bodyData).then((result)=>{
+            res.status(200).send({status:200,client:result});
+        }).catch((error)=>{
+            res.status(400).send({status:400,message:error.message});
+        });
+    }else{
+        res.status(400).send({status:400,message:"Datos del cliente son necesarios."});
+    }
 };
 
 exports.deleteWorker = function(req,res){
     let id = req.params.workerId;
     if(id){
-        workerModel.deleteWorker(id).then((result)=>{
-            res.status(200).send(result);
+        workerModel.deleteWorker(id).then((modified)=>{
+            if(modified){
+                res.send(200,{status:200,result:modified})
+            }else{
+                res.send(400,{status:400,message:"Se ejecutó la accion pero no hubieron cambios."});
+            }
         }).catch((error)=>{
-            res.status(401).send({message:error.message});
+            res.send(400,{status:400,message:error.message});
         });
     }else{
-        res.status(401).send({message:"workerId is needed!"});
+        res.send(400,{status:400,message:"workerId is needed!"});
     }
 };
 
 exports.updateWorker = function(req,res){
-    let bodyData = req.body;
-    let workerDTO = new WORKER(bodyData.workerId,bodyData.fullName,bodyData.password,bodyData.rol);
+    let id = req.params.workerId;
+    let newWorkerInfo = req.body;
 
-    workerModel.updateWorker(workerDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
+    workerModel.getWorker(id).then((worker) => {
+        if(worker){
+            workerModel.updateWorker(id,newWorkerInfo).then((result)=>{
+                if(result[0]){
+                    res.send(200,{status:200,result:result[0]});
+                }else{
+                    res.send(400,{status:400,message:"No se hicieron cambios."});
+                }
+            }).catch((error)=>{
+                res.send(400,{status:400,message:error.message});
+            });    
+        }else{
+            res.status(400).send({status:400,message:"Cliente no encontrado."});
+        }
+    }).catch((error) => {
+        res.status(400).send({status:400,message:error.message});
     });
+
 };
