@@ -1,10 +1,13 @@
 //conexion a la base de datos
 let Sequelize = require('sequelize');
 
-const connection = new Sequelize('jirethDataBase','postgres','casanueva4321',{
-    host:'database-1.cp7bc7sru879.us-east-2.rds.amazonaws.com',
+const connection = new Sequelize(process.env.DB_NAME,
+    process.env.DB_USER, 
+    process.env.DB_PASS,
+    {
+    host: process.env.DB_HOST,
     dialect:'postgres',
-    port:5432,
+    port:process.env.DB_PORT,
     pool:{
         max:4,
         min:0,
@@ -33,10 +36,6 @@ exports.Client = connection.define('client', {
         type: Sequelize.STRING,
         allowNull: false
     }
-},{
-    connection,
-    modelName: 'client'
-    // options
 });
 
 //Worker Model
@@ -56,10 +55,6 @@ exports.Worker = connection.define('worker', {
     password:{
         type:Sequelize.STRING
     }
-},{
-    connection,
-    modelName: 'worker'
-    // options
 });
 
 exports.Product = connection.define('product', {
@@ -76,10 +71,6 @@ exports.Product = connection.define('product', {
         type: Sequelize.INTEGER,
         allowNull: false
     }
-},{
-    connection,
-    modelName: 'product'
-    // options
 });
 
 

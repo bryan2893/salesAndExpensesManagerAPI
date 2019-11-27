@@ -1,5 +1,4 @@
 let jwt = require('jwt-simple');
-let configFile = require('../../configuration');
 let moment = require('moment');
 
 exports.createToken = function(workerObject){
@@ -12,5 +11,5 @@ exports.createToken = function(workerObject){
         exp: moment().add(1,"days").unix()
     };
 
-    return jwt.encode(payload, configFile.SECRET_TOKEN); //retorna los datos del payload codificados.
+    return jwt.encode(payload, process.env.SECRET || "llaveHiperSecreta");
 }

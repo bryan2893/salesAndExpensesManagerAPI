@@ -1,8 +1,11 @@
 let http = require('http');
 let express = require('express');
 let app = express();
-let confInfo = require('./configuration');
 let cors = require('cors');
+/*
+******Enviroment variables configuration*****
+*/
+require('dotenv').config();
 
 const dbConnection = require('./app/models/dbconnection').connection;
 
@@ -41,10 +44,20 @@ app.use(invoice_detail_routes);
 app.use(auth_routes);
 */
 
-const PORT = process.env.PORT || confInfo.PORT;
-
+/*
 dbConnection.sync().then(()=>{
-    http.createServer(app).listen(PORT,function(){
-        console.log("Listening on port "+ PORT);
+});
+*/
+
+dbConnection.sync().then(() => {
+  dbConnection
+  .authenticate()
+  .then(() => {
+    http.createServer(app).listen(process.env.SERVER_PORT,function(){
+        console.log("Listening on port "+ process.env.SERVER_PORT);
     });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 });
