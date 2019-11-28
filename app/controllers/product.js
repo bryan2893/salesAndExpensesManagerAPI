@@ -1,58 +1,92 @@
-//Controladores de lo que tenga que ver con las comidas registradas en la base de datos.
 let productModel = require('../models/product');
-let PRODUCT = require('../models/DTO/product');
 
 exports.getAllProducts = function(req,res){
 
-    productModel.getAllFoods().then((results)=>{
-        res.status(200).json(results);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
+    productModel.getAllProducts().then((products)=>{
+        res.status(200).send(products);
+    }).catch((error) => {
+        res.status(400).send({status:400,message:"Error: "+error.message});
     });
+
 };
 
 exports.getAProduct = function(req,res){
     let id = req.params.productId;
-    
-    productModel.getProduct(id).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
+    if(id){
+        productModel.getProduct(id).then((product)=>{
+            if(product){
+                return res.status(200).send({status:200,product:product});
+            }else{
+                return res.status(400).send({status:400,message:"No se encontró el producto"});
+            }
+        }).catch((error)=>{
+            return res.status(400).send({status:400,message:"Error: "+error.message});
+        });
+    }else{
+        return res.status(400).send({status:400,message:"Id de producto es requerido."});
+    }
 };
 
-exports.saveProduct = function(req,res){
+exports.createProduct = function(req,res){
     let bodyData = req.body;
-    let productDTO = new PRODUCT(null,bodyData.name,bodyData.category);
 
-    productModel.saveProduct(productDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
+    if(bodyData){
+        productModel.createProduct(bodyData).then((product)=>{
+            res.status(200).send({status:200,product:product});
+        }).catch((error)=>{
+            res.status(400).send({status:400,message:error.message});
+        });
+    }else{
+        res.status(400).send({status:400,message:"Datos del producto son necesarios."});
+    }
 };
 
 exports.deleteProduct = function(req,res){
     let id = req.params.productId;
     if(id){
-        productModel.deleteProduct(id).then((result)=>{
-            res.status(200).send(result);
-        }).catch((error)=>{
-            res.status(401).send({message:error.message});
+
+        productModel.getProduct(id).then((product) => {
+            if(product){
+                productModel.deleteProduct(id).then((modified)=>{
+                    if(modified){
+                        res.send(200,{status:200,result:modified})
+                    }else{
+                        res.send(400,{status:400,message:"Se ejecutó la accion pero no hubieron cambios."});
+                    }
+                }).catch((error)=>{
+                    res.send(400,{status:400,message:error.message});
+                });
+            }else{
+                res.status(400).send({status:400,message:"Producto no encontrado."});
+            }
+        }).catch((error) => {
+            res.status(400).send({status:400,message:error.message});
         });
     }else{
-        res.status(401).send({message:"productId is needed!"});
+        res.send(400,{status:400,message:"El id de producto es necesario."});
     }
 };
 
 exports.updateProduct = function(req,res){
-    let reqBody = req.body;
-    let productDTO = new PRODUCT(reqBody.productCode,reqBody.name,reqBody.category);
+    let id = req.params.productId;
+    let newProductInfo = req.body;
 
-    productModel.updateProduct(productDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
+    productModel.getProduct(id).then((product) => {
+        if(product){
+            productModel.updateProduct(id,newProductInfo).then((result)=>{
+                if(result[0]){
+                    res.send(200,{status:200,result:result[0]});
+                }else{
+                    res.send(400,{status:400,message:"No se hicieron cambios."});
+                }
+            }).catch((error)=>{
+                res.send(400,{status:400,message:error.message});
+            });    
+        }else{
+            res.status(400).send({status:400,message:"Producto no encontrado."});
+        }
+    }).catch((error) => {
+        res.status(400).send({status:400,message:error.message});
     });
 
 };
@@ -65,4 +99,5 @@ exports.getProductsByCategory = function(req,res){
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
+    
 };

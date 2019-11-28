@@ -5,11 +5,11 @@ let authMiddleware = require('../middleware/auth');
 
 //authMiddleware.ensureAuthenticate
 
-router.get('/products/getAllProducts',productController.getAllProducts);//funciona
-router.get('/products/getProduct/:productId',productController.getAProduct);//funciona
-router.post('/products/saveProduct',productController.saveProduct);//funciona
-router.get('/products/deleteProduct/:productId',productController.deleteProduct);//funciona.
-router.post('/products/updateProduct',productController.updateProduct);//funciona.
-router.get('/products/getProductsByCategory/:categoryId',productController.getProductsByCategory);//funciona
+router.get('/products/getAllProducts',productController.getAllProducts);//funciona.
+router.get('/products/getProduct/:productId',productController.getAProduct);//funciona.
+router.put('/products/saveProduct',productController.createProduct);//funciona.
+router.delete('/products/deleteProduct/:productId',productController.deleteProduct);//funciona.
+router.put('/products/updateProduct/:productId',productController.updateProduct);//funciona.
+router.get('/products/getByCategory/:categoryId',productController.getProductsByCategory);//funciona.
 
 module.exports = router;

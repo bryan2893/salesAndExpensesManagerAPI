@@ -1,104 +1,74 @@
-/*Se comunican con la base de datos para manipular 
-informacion relacionada con comidas especificamente
-*/
-let connection = require('./dbconnection');
+let dbObject = require('./dbconnection');
+const productModel = dbObject.Product;
 
-//Extrae todos los productos registrados...
 exports.getAllProducts = () => {
-    return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM products';
-        connection.query(sql, function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+    return new Promise((resolve,reject) => {
+        productModel.findAll().then((products) => {
+            resolve(products);
+        }).catch((error)=>{
+            reject(error);
         });
     });
 };
 
-//Se busca un producto especificamente por su id...
 exports.getProduct = (productId) => {
-    return new Promise((resolve,reject)=>{
-        let sql    = 'SELECT * FROM products WHERE productCode = ' + connection.escape(productId);
-        connection.query(sql, function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results[0]);
+    return new Promise((resolve,reject) => {
+        productModel.findByPk(productId).then((product) => {
+            resolve(product);
+        }).catch((error)=>{
+            reject(error);
         });
     });
 };
 
-exports.saveProduct = (productDTO)=>{
-    return new Promise((resolve,reject)=>{
-        let sql    = `INSERT INTO products (name,category) values ? `;
-        let values = [[productDTO.name,productDTO.category]];
-
-        connection.query(sql, [values] ,function (error, results, fields) {
-            if (error) reject(error);
-            productDTO.productCode = results.insertId;
-            resolve(productDTO);
+exports.createProduct = (productInfo)=>{
+    return new Promise((resolve,reject) => {
+        productModel.create(productInfo).then((createdProduct) => {
+            resolve(createdProduct);
+        }).catch((error)=>{
+            reject(error);
         });
     });
 };
 
 exports.deleteProduct = (productId)=>{
-    return new Promise((resolve,reject)=>{
-        this.getProduct(productId).then((product)=>{
-            if(product){
-                let sql = "DELETE FROM products WHERE productCode = ?";
-                connection.query(sql, productId ,function (error, results, fields) {
-                    if (error) reject(error);
-                    resolve(product);
-                });
-            }else{
-                resolve({message:"product not found!"});
+    return new Promise((resolve,reject) => {
+        productModel.destroy({
+            where: {
+                productCode: productId
             }
-
-        }).catch((error)=>{
-            resolve(error);
-        });
-
-    });
-};
-
-exports.updateProduct = (productDTO)=>{
-     
-    return new Promise((resolve,reject)=>{
-
-        this.getProduct(productDTO.productCode).then((product)=>{
-            if(product){
-                let sql = `UPDATE products
-                            SET name = ?,
-                            category = ? 
-                            WHERE productCode = ?`;
-
-                let data = [productDTO.name,productDTO.category,productDTO.productCode];
-
-                connection.query(sql, data ,function (error, results, fields) {
-                    if (error) reject(error);
-                    resolve(product);
-                });
-            }else{
-                resolve({message:"product not found!"})
-            }
+          }).then((response) => {
+            resolve(response);
         }).catch((error)=>{
             reject(error);
         });
+    });
+};
 
+exports.updateProduct = (productId,newProductInfo)=>{
+     
+    return new Promise((resolve,reject) => {
+        productModel.update(newProductInfo,{
+            where: {productCode: productId}
+        }).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
+        });
     });
 
 };
 
 exports.getProductsByCategory = (categoryId)=>{
-
-    return new Promise((resolve,reject)=>{
-        let sql = `SELECT * FROM products
-           WHERE categoryId = ?`;
-
-        let data = [categoryId];
-
-        connection.query(sql, data ,function (error, results, fields) {
-            if (error) reject(error);
-            resolve(results);
+      return new Promise((resolve,reject) => {
+        productModel.findAll({
+            where: {
+                categoryId: categoryId
+            }
+          }).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
         });
-
     });
-
 };

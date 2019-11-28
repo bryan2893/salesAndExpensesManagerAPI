@@ -15,8 +15,8 @@ app.use(cors());
 //Se importan las rutas o endpoints de la api.
 let client_routes = require('./app/routes/client_routes');
 let worker_routes = require('./app/routes/worker_routes');
-/*
 let product_routes = require('./app/routes/product_routes');
+/*
 let api_routes = require('./app/routes/api_routes');
 let product_variety_routes = require('./app/routes/product_variety_routes');
 let product_category_routes = require('./app/routes/product_category_routes');
@@ -31,6 +31,7 @@ let auth_routes = require('./app/routes/auth_routes');
 //se setean las rutas que el app debe usar.
 app.use(client_routes);
 app.use(worker_routes);
+app.use(product_routes);
 /*
 app.use(api_routes);
 app.use(product_routes);
