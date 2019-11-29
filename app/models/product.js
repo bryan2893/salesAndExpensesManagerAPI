@@ -1,74 +1,96 @@
-let dbObject = require('./dbconnection');
-const productSubCategoryModel = dbObject.ProductSubCategory;
+let connection = require('./dbconnection');
 
-exports.getAllSubCategories = () => {
-    return new Promise((resolve,reject) => {
-        productSubCategoryModel.findAll().then((productSubCategories) => {
-            resolve(productSubCategories);
-        }).catch((error)=>{
-            reject(error);
+//Extrae todos los productos registrados...
+exports.getAllProductVarieties = () => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM productvarieties';
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
         });
     });
 };
 
-exports.getSubCategory = (subCategoryId) => {
-    return new Promise((resolve,reject) => {
-        productSubCategoryModel.findByPk(subCategoryId).then((productSubCategory) => {
-            resolve(productSubCategory);
-        }).catch((error)=>{
-            reject(error);
+//Se busca un producto especificamente por su id...
+exports.getProductVariety = (varietyId) => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM productvarieties WHERE varietyId = ' + connection.escape(varietyId);
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results[0]);
         });
     });
 };
 
-exports.createSubCategory = (subCategoryInfo)=>{
-    return new Promise((resolve,reject) => {
-        productSubCategoryModel.create(subCategoryInfo).then((createdSubCategory) => {
-            resolve(createdSubCategory);
-        }).catch((error)=>{
-            reject(error);
+//Se busca un producto especificamente por su id...
+exports.getProductVarietiesOfAproduct = (productId) => {
+    return new Promise((resolve,reject)=>{
+        let sql    = 'SELECT * FROM productvarieties WHERE productId = ' + connection.escape(productId);
+        connection.query(sql, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
         });
     });
 };
 
-exports.deleteSubCategory = (subCategoryId)=>{
-    return new Promise((resolve,reject) => {
-        productSubCategoryModel.destroy({
-            where: {
-                subCategoryCode: subCategoryId
+exports.saveProductVariety = (productVarietyDTO)=>{
+    return new Promise((resolve,reject)=>{
+        let sql    = `INSERT INTO productvarieties (productId,name,price) values ? `;
+        let values = [[productVarietyDTO.productId,productVarietyDTO.name,productVarietyDTO.price]];
+
+        connection.query(sql, [values] ,function (error, results, fields) {
+            if (error) reject(error);
+            productVarietyDTO.varietyId = results.insertId;
+            resolve(productVarietyDTO);
+        });
+    });
+};
+
+exports.deleteProductVariety = (varietyId)=>{
+    return new Promise((resolve,reject)=>{
+        this.getProductVariety(varietyId).then((productVariety)=>{
+            if(productVariety){
+                let sql = "DELETE FROM productvarieties WHERE varietyId = ?";
+                connection.query(sql,varietyId ,function (error, results, fields) {
+                    if (error) reject(error);
+                    resolve(productVariety);
+                });
+            }else{
+                resolve({message:"product variety not found!"});
             }
-          }).then((response) => {
-            resolve(response);
         }).catch((error)=>{
-            reject(error);
+            resolve(error);
         });
+
     });
 };
 
-exports.updateSubCategory = (subCategoryId,newSubCategoryInfo)=>{
-     
-    return new Promise((resolve,reject) => {
-        productSubCategoryModel.update(newSubCategoryInfo,{
-            where: {subCategoryCode: subCategoryId}
-        }).then((response) => {
-            resolve(response);
-        }).catch((error)=>{
-            reject(error);
-        });
-    });
+exports.updateProductVariety = (productVarietyDTO)=>{
 
-};
+    return new Promise((resolve,reject)=>{
 
-exports.getSubCategoriesByCategory = (categoryId)=>{
-      return new Promise((resolve,reject) => {
-        productSubCategoryModel.findAll({
-            where: {
-                categoryCode: categoryId
+        this.getProductVariety(productVarietyDTO.varietyId).then((productVariety)=>{
+            if(productVariety){
+                let sql = `UPDATE productvarieties
+                            SET productId = ?, 
+                            name = ?,
+                            price = ? 
+                            WHERE varietyId = ?`;
+
+                let data = [productVarietyDTO.productId,productVarietyDTO.name,productVarietyDTO.price,productVarietyDTO.varietyId];
+
+                connection.query(sql, data ,function (error, results, fields) {
+                    if (error) reject(error);
+                    resolve(productVariety);
+                });
+
+            }else{
+                resolve({message:"Product variety not found!"})
             }
-          }).then((response) => {
-            resolve(response);
         }).catch((error)=>{
             reject(error);
         });
+
     });
+
 };

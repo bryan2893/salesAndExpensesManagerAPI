@@ -1,5 +1,5 @@
 let express = require('express');
-let productController = require('../controllers/product');
+let productController = require('../controllers/product_sub_category');
 let router = express.Router();
 let authMiddleware = require('../middleware/auth');
 

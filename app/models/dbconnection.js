@@ -23,7 +23,7 @@ const connection = new Sequelize(process.env.DB_NAME,
 //********** MODELS ************/
 
 //Client model.
-exports.Client = connection.define('client', {
+exports.Client = connection.define('clients', {
     clientId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -39,7 +39,7 @@ exports.Client = connection.define('client', {
 });
 
 //Worker Model
-exports.Worker = connection.define('worker', {
+exports.Worker = connection.define('workers', {
     workerId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -69,6 +69,38 @@ exports.ProductSubCategory = connection.define('product_sub_categories', {
     },
     categoryCode:{
         type: Sequelize.INTEGER,
+        allowNull: false
+    }
+});
+
+exports.ProductCategory = connection.define('product_categories', {
+    categoryCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+
+exports.Product = connection.define('products', {
+    productCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    price: {
+        type:Sequelize.FLOAT,
+        allowNull: false
+    },
+    subCategoryCode:{
+        type:Sequelize.INTEGER,
         allowNull: false
     }
 });
