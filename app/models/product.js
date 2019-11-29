@@ -1,41 +1,41 @@
 let dbObject = require('./dbconnection');
-const productModel = dbObject.Product;
+const productSubCategoryModel = dbObject.ProductSubCategory;
 
-exports.getAllProducts = () => {
+exports.getAllSubCategories = () => {
     return new Promise((resolve,reject) => {
-        productModel.findAll().then((products) => {
-            resolve(products);
+        productSubCategoryModel.findAll().then((productSubCategories) => {
+            resolve(productSubCategories);
         }).catch((error)=>{
             reject(error);
         });
     });
 };
 
-exports.getProduct = (productId) => {
+exports.getSubCategory = (subCategoryId) => {
     return new Promise((resolve,reject) => {
-        productModel.findByPk(productId).then((product) => {
-            resolve(product);
+        productSubCategoryModel.findByPk(subCategoryId).then((productSubCategory) => {
+            resolve(productSubCategory);
         }).catch((error)=>{
             reject(error);
         });
     });
 };
 
-exports.createProduct = (productInfo)=>{
+exports.createSubCategory = (subCategoryInfo)=>{
     return new Promise((resolve,reject) => {
-        productModel.create(productInfo).then((createdProduct) => {
-            resolve(createdProduct);
+        productSubCategoryModel.create(subCategoryInfo).then((createdSubCategory) => {
+            resolve(createdSubCategory);
         }).catch((error)=>{
             reject(error);
         });
     });
 };
 
-exports.deleteProduct = (productId)=>{
+exports.deleteSubCategory = (subCategoryId)=>{
     return new Promise((resolve,reject) => {
-        productModel.destroy({
+        productSubCategoryModel.destroy({
             where: {
-                productCode: productId
+                subCategoryCode: subCategoryId
             }
           }).then((response) => {
             resolve(response);
@@ -45,11 +45,11 @@ exports.deleteProduct = (productId)=>{
     });
 };
 
-exports.updateProduct = (productId,newProductInfo)=>{
+exports.updateSubCategory = (subCategoryId,newSubCategoryInfo)=>{
      
     return new Promise((resolve,reject) => {
-        productModel.update(newProductInfo,{
-            where: {productCode: productId}
+        productSubCategoryModel.update(newSubCategoryInfo,{
+            where: {subCategoryCode: subCategoryId}
         }).then((response) => {
             resolve(response);
         }).catch((error)=>{
@@ -59,11 +59,11 @@ exports.updateProduct = (productId,newProductInfo)=>{
 
 };
 
-exports.getProductsByCategory = (categoryId)=>{
+exports.getSubCategoriesByCategory = (categoryId)=>{
       return new Promise((resolve,reject) => {
-        productModel.findAll({
+        productSubCategoryModel.findAll({
             where: {
-                categoryId: categoryId
+                categoryCode: categoryId
             }
           }).then((response) => {
             resolve(response);

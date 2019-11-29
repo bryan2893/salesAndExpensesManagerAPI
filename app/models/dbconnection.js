@@ -57,8 +57,8 @@ exports.Worker = connection.define('worker', {
     }
 });
 
-exports.Product = connection.define('product', {
-    productCode: {
+exports.ProductSubCategory = connection.define('product_sub_categories', {
+    subCategoryCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
         primaryKey:true
@@ -67,11 +67,10 @@ exports.Product = connection.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    categoryId:{
+    categoryCode:{
         type: Sequelize.INTEGER,
         allowNull: false
     }
 });
-
 
 exports.connection = connection;
