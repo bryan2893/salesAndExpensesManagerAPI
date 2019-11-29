@@ -1,67 +1,100 @@
-let productVarietyModel = require('../models/product');
-let PRODUCTVARIETY = require('../models/DTO/product_variety');
+let productModel = require('../models/product');
 
-exports.getAllProductVarieties = function(req,res){
+exports.getAllProducts = function(req,res){
 
-    productVarietyModel.getAllProductVarieties().then((results)=>{
-        res.status(200).json(results);
+    productModel.getAllProducts().then((products)=>{
+        res.status(200).send(products);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
 
 };
 
-exports.getAProductVariety = function(req,res){
-    let varietyId = req.params.varietyId;
-    
-    productVarietyModel.getProductVariety(varietyId).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-};
-
-exports.getProductVarietiesOfAproduct = function(req,res){
-    let productId = req.params.productId;
-
-    productVarietyModel.getProductVarietiesOfAproduct(productId).then((results)=>{
-        res.status(200).json(results);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-    
-};
-
-exports.saveProductVariety = function(req,res){
-    let bodyData = req.body;
-    let productVarietyDTO = new PRODUCTVARIETY(null,bodyData.productId,bodyData.name,bodyData.price);
-
-    productVarietyModel.saveProductVariety(productVarietyDTO).then((result)=>{
-        res.status(200).send(result);
-    }).catch((error)=>{
-        res.status(401).send({message:error.message});
-    });
-};
-
-exports.deleteProductVariety = function(req,res){
-    let varietyId = req.params.varietyId;
-    if(varietyId){
-        productVarietyModel.deleteProductVariety(varietyId).then((result)=>{
-            res.status(200).send(result);
+exports.getProduct = function(req,res){
+    let id = req.params.productCode;
+    if(id){
+        productModel.getProduct(id).then((product)=>{
+            if(product){
+                return res.status(200).send({status:200,product:product});
+            }else{
+                return res.status(400).send({status:400,message:"No se encontró el producto"});
+            }
         }).catch((error)=>{
-            res.status(401).send({message:error.message});
+            return res.status(400).send({status:400,message:"Error: "+error.message});
         });
     }else{
-        res.status(401).send({message:"varietyId is required!"});
+        return res.status(400).send({status:400,message:"Código de producto es requerido."});
     }
 };
 
-exports.updateProductVariety = function(req,res){
-    let reqBody = req.body;
-    let productVarietyDTO = new PRODUCTVARIETY(reqBody.varietyId,reqBody.productId,reqBody.name,reqBody.price);
+exports.createProduct = function(req,res){
+    let bodyData = req.body;
 
-    productVarietyModel.updateProductVariety(productVarietyDTO).then((result)=>{
-        res.status(200).send(result);
+    if(bodyData){
+        productModel.createProduct(bodyData).then((product)=>{
+            res.status(200).send({status:200,product:product});
+        }).catch((error)=>{
+            res.status(400).send({status:400,message:error.message});
+        });
+    }else{
+        res.status(400).send({status:400,message:"Datos del producto son necesarios."});
+    }
+};
+
+exports.deleteProduct = function(req,res){
+    let id = req.params.productCode;
+    if(id){
+        productModel.getProduct(id).then((product) => {
+            if(product){
+                productModel.deleteProduct(id).then((deleted)=>{
+                    if(deleted){
+                        res.status(200).send({status:200,result:deleted})
+                    }else{
+                        res.status(400).send({status:400,message:"Se ejecutó la accion pero no hubieron cambios."});
+                    }
+                }).catch((error)=>{
+                    res.status(400).send({status:400,message:error.message});
+                });
+            }else{
+                res.status(400).send({status:400,message:"Producto no encontrado."});
+            }
+        }).catch((error) => {
+            res.status(400).send({status:400,message:error.message});
+        });
+    }else{
+        res.status(400).send({status:400,message:"El código de producto es necesario."});
+    }
+};
+
+exports.updateProduct = function(req,res){
+    let id = req.params.productCode;
+    let productInfo = req.body;
+
+    productModel.getProduct(id).then((product) => {
+        if(product){
+            productModel.updateProduct(id,productInfo).then((result)=>{
+                if(result[0]){
+                    res.status(200).send({status:200,result:result[0]});
+                }else{
+                    res.status(400).send({status:400,message:"No se hicieron cambios."});
+                }
+            }).catch((error)=>{
+                res.status(400).send({status:400,message:error.message});
+            });    
+        }else{
+            res.status(400).send({status:400,message:"Producto no encontrado."});
+        }
+    }).catch((error) => {
+        res.status(400).send({status:400,message:error.message});
+    });
+};
+
+
+exports.filterProductsBySubCategory = function(req,res){
+    let subCategoryCode = req.params.subCategoryCode;
+
+    productModel.filterProductsBySubCategory(subCategoryCode).then((filteredProductsList)=>{
+        res.status(200).send(filteredProductsList);
     }).catch((error)=>{
         res.status(401).send({message:error.message});
     });
