@@ -22,7 +22,6 @@ const connection = new Sequelize(process.env.DB_NAME,
 
 //********** MODELS ************/
 
-//Client model.
 exports.Client = connection.define('clients', {
     clientId: {
         type:Sequelize.INTEGER,
@@ -38,7 +37,6 @@ exports.Client = connection.define('clients', {
     }
 });
 
-//Worker Model
 exports.Worker = connection.define('workers', {
     workerId: {
         type:Sequelize.INTEGER,
@@ -104,5 +102,65 @@ exports.Product = connection.define('products', {
         allowNull: false
     }
 });
+
+exports.SaleInvoice = connection.define('saleInvoices', {
+    workerId: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    invoiceCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    dateOfCreation: {
+        type:Sequelize.DATE,
+        allowNull: false
+    },
+    toCarryOut:{
+        type:Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+    pending:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+    },
+    clientId:{
+        type:Sequelize.STRING
+    },
+    clientName:{
+        type:Sequelize.STRING,
+        allowNull:false
+    }
+});
+
+exports.SaleDetail = connection.define('saleDetails', {
+    invoiceCode: {
+        type:Sequelize.INTEGER,
+        primaryKey:true
+    },
+    detailNumber: {
+        type: Sequelize.INTEGER,
+        primaryKey:true
+    },
+    productCode: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    price: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    }
+});
+
+//********** ASSOCIATIONS ************/
+
+
 
 exports.connection = connection;

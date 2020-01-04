@@ -28,7 +28,7 @@ app.use(product_category_routes);
 app.use(product_routes);
 
 
-dbConnection.sync().then(() => {
+dbConnection.sync({force:true}).then(() => {
   dbConnection
   .authenticate()
   .then(() => {
