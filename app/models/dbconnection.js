@@ -1,7 +1,8 @@
 //conexion a la base de datos
-let Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
+const Model = Sequelize.Model;
 
-const connection = new Sequelize(process.env.DB_NAME,
+const sequelize = new Sequelize(process.env.DB_NAME,
     process.env.DB_USER, 
     process.env.DB_PASS,
     {
@@ -22,7 +23,9 @@ const connection = new Sequelize(process.env.DB_NAME,
 
 //********** MODELS ************/
 
-exports.Client = connection.define('clients', {
+class Client extends Model{}
+Client.init({
+    //Attributes
     clientId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -35,9 +38,15 @@ exports.Client = connection.define('clients', {
         type: Sequelize.STRING,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'clients'
 });
 
-exports.Worker = connection.define('workers', {
+class Worker extends Model{}
+Worker.init({
+    //Attributes
     workerId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -53,9 +62,15 @@ exports.Worker = connection.define('workers', {
     password:{
         type:Sequelize.STRING
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'workers'
 });
 
-exports.ProductSubCategory = connection.define('product_sub_categories', {
+class ProductSubCategory extends Model{}
+ProductSubCategory.init({
+    //Attributes
     subCategoryCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -69,9 +84,15 @@ exports.ProductSubCategory = connection.define('product_sub_categories', {
         type: Sequelize.INTEGER,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'product_sub_categories'
 });
 
-exports.ProductCategory = connection.define('product_categories', {
+class ProductCategory extends Model{}
+ProductCategory.init({
+    //Attributes
     categoryCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -81,9 +102,15 @@ exports.ProductCategory = connection.define('product_categories', {
         type: Sequelize.STRING,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'product_categories'
 });
 
-exports.Product = connection.define('products', {
+class Product extends Model{}
+Product.init({
+    //Attributes
     productCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -101,9 +128,15 @@ exports.Product = connection.define('products', {
         type:Sequelize.INTEGER,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'products'
 });
 
-exports.SaleInvoice = connection.define('saleInvoices', {
+class SaleInvoice extends Model{}
+SaleInvoice.init({
+    //Attributes
     workerId: {
         type: Sequelize.STRING,
         allowNull: false
@@ -134,9 +167,15 @@ exports.SaleInvoice = connection.define('saleInvoices', {
         type:Sequelize.STRING,
         allowNull:false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'saleInvoices'
 });
 
-exports.SaleDetail = connection.define('saleDetails', {
+class SaleDetail extends Model{}
+SaleDetail.init({
+    //Attributes
     invoiceCode: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -157,10 +196,17 @@ exports.SaleDetail = connection.define('saleDetails', {
         type: Sequelize.FLOAT,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'saleDetails'
 });
 
 //********** ASSOCIATIONS ************/
 
 
 
-exports.connection = connection;
+module.exports = {sequelize,Client,Worker,ProductSubCategory,ProductCategory,
+Product,SaleInvoice,SaleDetail}
+
+//exports.connection = connection;

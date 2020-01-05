@@ -7,7 +7,7 @@ let cors = require('cors');
 */
 require('dotenv').config();
 
-const dbConnection = require('./app/models/dbconnection').connection;
+const dbConnection = require('./app/models/dbconnection').sequelize;
 
 app.use(express.json());
 app.use(cors());
