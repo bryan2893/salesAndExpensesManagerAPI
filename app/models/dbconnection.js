@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
 
 const sequelize = new Sequelize(process.env.DB_NAME,
-    process.env.DB_USER, 
+    process.env.DB_USER,
     process.env.DB_PASS,
     {
     host: process.env.DB_HOST,
@@ -137,10 +137,6 @@ Product.init({
 class SaleInvoice extends Model{}
 SaleInvoice.init({
     //Attributes
-    workerId: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     invoiceCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -159,9 +155,6 @@ SaleInvoice.init({
         type:Sequelize.BOOLEAN,
         allowNull:false,
         defaultValue:false
-    },
-    clientId:{
-        type:Sequelize.STRING
     },
     clientName:{
         type:Sequelize.STRING,
@@ -203,10 +196,8 @@ SaleDetail.init({
 });
 
 //********** ASSOCIATIONS ************/
-
-
+SaleInvoice.belongsTo(Worker,{foreignKey: 'fk_worker'});
+SaleInvoice.belongsTo(Client,{foreignKey: 'fk_client'});
 
 module.exports = {sequelize,Client,Worker,ProductSubCategory,ProductCategory,
 Product,SaleInvoice,SaleDetail}
-
-//exports.connection = connection;
