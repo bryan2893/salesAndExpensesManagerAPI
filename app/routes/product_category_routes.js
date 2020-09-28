@@ -5,10 +5,10 @@ let authMiddleware = require('../middleware/auth');
 
 //authMiddleware.ensureAuthenticate
 
-router.get('/product_categories/getAllProductCategories',product_category_controller.getAllProductCategories);//funciona.
-router.get('/product_categories/getProductCategory/:categoryId',product_category_controller.getAProductCategory);//funciona.
-router.post('/product_categories/saveProductCategory',product_category_controller.saveProductCategory);//funciona.
-router.get('/product_categories/deleteProductCategory/:categoryId',product_category_controller.deleteProductCategory);//funciona.
-router.post('/product_categories/updateProductCategory',product_category_controller.updateProductCategory);//funciona.
+router.get('/product_categories/getAllProductCategories',product_category_controller.getAllProductCategories);
+router.get('/product_categories/getProductCategory/:categoryCode',product_category_controller.getProductCategory);
+router.put('/product_categories/createProductCategory',product_category_controller.createProductCategory);
+router.delete('/product_categories/deleteProductCategory/:categoryCode',product_category_controller.deleteProductCategory);
+router.put('/product_categories/updateProductCategory/:categoryCode',product_category_controller.updateProductCategory);
 
 module.exports = router;

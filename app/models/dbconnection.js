@@ -1,8 +1,9 @@
 //conexion a la base de datos
-let Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
+const Model = Sequelize.Model;
 
-const connection = new Sequelize(process.env.DB_NAME,
-    process.env.DB_USER, 
+const sequelize = new Sequelize(process.env.DB_NAME,
+    process.env.DB_USER,
     process.env.DB_PASS,
     {
     host: process.env.DB_HOST,
@@ -22,8 +23,9 @@ const connection = new Sequelize(process.env.DB_NAME,
 
 //********** MODELS ************/
 
-//Client model.
-exports.Client = connection.define('client', {
+class Client extends Model{}
+Client.init({
+    //Attributes
     clientId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -36,10 +38,15 @@ exports.Client = connection.define('client', {
         type: Sequelize.STRING,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'clients'
 });
 
-//Worker Model
-exports.Worker = connection.define('worker', {
+class Worker extends Model{}
+Worker.init({
+    //Attributes
     workerId: {
         type:Sequelize.INTEGER,
         primaryKey:true
@@ -55,9 +62,55 @@ exports.Worker = connection.define('worker', {
     password:{
         type:Sequelize.STRING
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'workers'
 });
 
-exports.Product = connection.define('product', {
+class ProductSubCategory extends Model{}
+ProductSubCategory.init({
+    //Attributes
+    subCategoryCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    categoryCode:{
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+},{
+    //Options
+    sequelize,
+    modelName: 'product_sub_categories'
+});
+
+class ProductCategory extends Model{}
+ProductCategory.init({
+    //Attributes
+    categoryCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+},{
+    //Options
+    sequelize,
+    modelName: 'product_categories'
+});
+
+class Product extends Model{}
+Product.init({
+    //Attributes
     productCode: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
@@ -67,11 +120,84 @@ exports.Product = connection.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    categoryId:{
-        type: Sequelize.INTEGER,
+    price: {
+        type:Sequelize.FLOAT,
+        allowNull: false
+    },
+    subCategoryCode:{
+        type:Sequelize.INTEGER,
         allowNull: false
     }
+},{
+    //Options
+    sequelize,
+    modelName: 'products'
 });
 
+class SaleInvoice extends Model{}
+SaleInvoice.init({
+    //Attributes
+    invoiceCode: {
+        type:Sequelize.INTEGER,
+        autoIncrement:true,
+        primaryKey:true
+    },
+    dateOfCreation: {
+        type:Sequelize.DATE,
+        allowNull: false
+    },
+    toCarryOut:{
+        type:Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+    pending:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+    },
+    clientName:{
+        type:Sequelize.STRING,
+        allowNull:false
+    }
+},{
+    //Options
+    sequelize,
+    modelName: 'saleInvoices'
+});
 
-exports.connection = connection;
+class SaleDetail extends Model{}
+SaleDetail.init({
+    //Attributes
+    invoiceCode: {
+        type:Sequelize.INTEGER,
+        primaryKey:true
+    },
+    detailNumber: {
+        type: Sequelize.INTEGER,
+        primaryKey:true
+    },
+    productCode: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    price: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+    }
+},{
+    //Options
+    sequelize,
+    modelName: 'saleDetails'
+});
+
+//********** ASSOCIATIONS ************/
+SaleInvoice.belongsTo(Worker,{foreignKey: 'fk_worker'});
+SaleInvoice.belongsTo(Client,{foreignKey: 'fk_client'});
+
+module.exports = {sequelize,Client,Worker,ProductSubCategory,ProductCategory,
+Product,SaleInvoice,SaleDetail}

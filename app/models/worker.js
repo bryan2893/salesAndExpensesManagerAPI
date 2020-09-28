@@ -59,3 +59,19 @@ exports.updateWorker = (workerId,newWorkerInfo)=>{
     });
 
 };
+
+exports.login = (workerId,password)=>{
+
+    return new Promise((resolve,reject) => {
+        workerModel.findAll({
+            limit:1,
+            where: {workerId: workerId,
+            password: password}
+        }).then((response) => {
+            resolve(response);
+        }).catch((error)=>{
+            reject(error);
+        });
+    });
+
+};

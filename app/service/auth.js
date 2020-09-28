@@ -11,5 +11,5 @@ exports.createToken = function(workerObject){
         exp: moment().add(1,"days").unix()
     };
 
-    return jwt.encode(payload, process.env.SECRET || "llaveHiperSecreta");
+    return jwt.encode(payload, process.env.SECRET || "otraLlaveQueNoSepan");
 }
