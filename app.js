@@ -7,29 +7,31 @@ let cors = require('cors');
 */
 require('dotenv').config();
 
-const dbConnection = require('./app/models/dbconnection').sequelize;
+const dataBase = require('./app/database/database');
 
 app.use(express.json());
 app.use(cors());
 
 
-let auth_routes = require('./app/routes/auth_routes');
-let client_routes = require('./app/routes/client_routes');
-let worker_routes = require('./app/routes/worker_routes');
-let product_sub_category_routes = require('./app/routes/product_sub_category_routes');
-let product_category_routes = require('./app/routes/product_category_routes');
-let product_routes = require('./app/routes/product_routes');
+//let auth_routes = require('./app/routes/auth_routes');
+//let client_routes = require('./app/routes/client_routes');
+//let worker_routes = require('./app/routes/worker_routes');
+//let product_sub_category_routes = require('./app/routes/product_sub_category_routes');
+//let product_category_routes = require('./app/routes/product_category_routes');
+//let product_routes = require('./app/routes/product_routes');
+let trabajadorRoutes = require('./app/routes/trabajador');
 
-app.use(auth_routes);
-app.use(client_routes);
-app.use(worker_routes);
-app.use(product_sub_category_routes);
-app.use(product_category_routes);
-app.use(product_routes);
+//app.use(auth_routes);
+//app.use(client_routes);
+//app.use(worker_routes);
+//app.use(product_sub_category_routes);
+//app.use(product_category_routes);
+//app.use(product_routes);
+app.use(trabajadorRoutes);
 
 
-dbConnection.sync({force:true}).then(() => {
-  dbConnection
+dataBase.sync({force:true}).then(() => {
+  dataBase
   .authenticate()
   .then(() => {
     http.createServer(app).listen(process.env.SERVER_PORT,function(){
