@@ -24,6 +24,7 @@ let rolRoutes = require('./app/routes/rol');
 let clienteRoutes = require('./app/routes/cliente');
 let facturaVentaRoutes = require('./app/routes/factura_venta');
 let detalleFacturaVentaRoutes = require('./app/routes/detalle_factura_venta');
+let productosRoutes = require('./app/routes/producto');
 
 //app.use(auth_routes);
 //app.use(client_routes);
@@ -36,6 +37,7 @@ app.use(rolRoutes);
 app.use(clienteRoutes);
 app.use(facturaVentaRoutes);
 app.use(detalleFacturaVentaRoutes);
+app.use(productosRoutes);
 
 
 dataBase.sync({force:true}).then(() => {
