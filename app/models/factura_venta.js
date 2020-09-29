@@ -1,6 +1,5 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
-const Rol = require('../models/rol');
 
 const FacturaVenta = dataBase.define('facturas_venta',{
     //atributos

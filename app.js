@@ -22,8 +22,10 @@ app.use(cors());
 let trabajadorRoutes = require('./app/routes/trabajador');
 let rolRoutes = require('./app/routes/rol');
 let clienteRoutes = require('./app/routes/cliente');
-//let facturaVentaRoutes = require('./app/routes/factura_venta');
+let facturaVentaRoutes = require('./app/routes/factura_venta');
+/*
 let detalleFacturaVentaRoutes = require('./app/routes/detalle_factura_venta');
+*/
 
 //app.use(auth_routes);
 //app.use(client_routes);
@@ -34,8 +36,10 @@ let detalleFacturaVentaRoutes = require('./app/routes/detalle_factura_venta');
 app.use(trabajadorRoutes);
 app.use(rolRoutes);
 app.use(clienteRoutes);
-//app.use(facturaVentaRoutes);
+app.use(facturaVentaRoutes);
+/*
 app.use(detalleFacturaVentaRoutes);
+*/
 
 
 dataBase.sync({force:true}).then(() => {
