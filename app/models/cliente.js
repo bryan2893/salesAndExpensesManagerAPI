@@ -1,5 +1,6 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
+const FacturaVenta = require('../models/factura_venta');
 
 const Cliente = dataBase.define('cliente',{
     //atributos
@@ -38,5 +39,7 @@ const Cliente = dataBase.define('cliente',{
     id:false,
     dataBase
 });
+
+Cliente.hasMany(FacturaVenta, {foreignKey:'id_cliente'})
 
 module.exports = Cliente;
