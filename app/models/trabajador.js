@@ -1,5 +1,6 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
+const Rol = require('../models/rol');
 
 const Trabajador = dataBase.define('trabajadore',{
     //atributos
@@ -26,5 +27,8 @@ const Trabajador = dataBase.define('trabajadore',{
     id:false,
     dataBase
 });
+
+Trabajador.belongsToMany(Rol, {through: 'trabajadores_roles', foreignKey: 'id_rol' })
+Rol.belongsToMany(Trabajador, {through: 'trabajadores_roles', foreignKey: 'id_trabajador' })
 
 module.exports = Trabajador;
