@@ -21,6 +21,7 @@ app.use(cors());
 //let product_routes = require('./app/routes/product_routes');
 let trabajadorRoutes = require('./app/routes/trabajador');
 let rolRoutes = require('./app/routes/rol');
+let clienteRoutes = require('./app/routes/cliente');
 
 //app.use(auth_routes);
 //app.use(client_routes);
@@ -30,6 +31,7 @@ let rolRoutes = require('./app/routes/rol');
 //app.use(product_routes);
 app.use(trabajadorRoutes);
 app.use(rolRoutes);
+app.use(clienteRoutes);
 
 
 dataBase.sync({force:true}).then(() => {
