@@ -2,7 +2,7 @@ const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
 //const FacturaVenta = require('../models/factura_venta');
 
-const DetalleFacturaVenta = dataBase.define('trabajadore',{
+const DetalleFacturaVenta = dataBase.define('detalles_facturas_venta',{
     //atributos
     numero_factura:{
         primaryKey:true,
