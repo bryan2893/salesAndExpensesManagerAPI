@@ -1,6 +1,7 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
 const DetalleFacturaVenta = require('../models/detalle_factura_venta');
+const CategoriasProducto = require('./categoria_producto');
 
 const Producto = dataBase.define('producto',{
     //atributos
@@ -30,5 +31,8 @@ const Producto = dataBase.define('producto',{
 
 //Creacion de asociaciones.
 Producto.hasMany(DetalleFacturaVenta, {foreignKey:'id_producto'})
+
+Producto.belongsToMany(CategoriasProducto, {through: 'producto_categorias', foreignKey: 'id_categoria' })
+CategoriasProducto.belongsToMany(Producto, {through: 'producto_categorias', foreignKey: 'id_producto' })
 
 module.exports = Producto;
