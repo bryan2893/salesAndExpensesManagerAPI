@@ -29,6 +29,7 @@ let categoriaProductosRoutes = require('./app/routes/categoria_producto');
 let proveedorRoutes = require('./app/routes/proveedor');
 let facturaCompraRoutes = require('./app/routes/factura_compra');
 let materiaPrimaRoutes = require('./app/routes/materia_prima');
+let detalleFacturaCompraRoutes = require('./app/routes/detalle_factura_compra');
 
 //app.use(auth_routes);
 //app.use(client_routes);
@@ -46,6 +47,8 @@ app.use(categoriaProductosRoutes);
 app.use(proveedorRoutes);
 app.use(facturaCompraRoutes);
 app.use(materiaPrimaRoutes);
+app.use(facturaCompraRoutes);
+app.use(detalleFacturaCompraRoutes);
 
 
 dataBase.sync({force:true}).then(() => {
