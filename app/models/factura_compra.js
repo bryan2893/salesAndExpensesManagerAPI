@@ -1,6 +1,6 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
-//const DetalleFacturaVenta = require('../models/detalle_factura_venta');
+const DetalleFacturaCompra = require('../models/detalle_factura_compra');
 
 const FacturaCompra = dataBase.define('facturas_compra',{
     //atributos
@@ -37,6 +37,6 @@ const FacturaCompra = dataBase.define('facturas_compra',{
 });
 
 //Creacion de asociaciones.
-//FacturaCompra.hasMany(DetalleFacturaVenta, {foreignKey:'numero_factura'})
+FacturaCompra.hasMany(DetalleFacturaCompra, {foreignKey:'numero_factura'})
 
 module.exports = FacturaCompra;
