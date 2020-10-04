@@ -1,6 +1,8 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
 let CategoriaMateriaPrima = require('../models/categoria_materia_prima');
+let UnidadMedida = require('../models/unidad_medida');
+let DetalleFacturaCompra = require('../models/detalle_factura_compra');
 
 const MateriaPrima = dataBase.define('materias_prima',{
     //atributos
@@ -14,7 +16,7 @@ const MateriaPrima = dataBase.define('materias_prima',{
         allowNull: false
     },
     id_unidad_medida:{
-        type:Sequelize.FLOAT,
+        type:Sequelize.INTEGER,
         allowNull: false
     }
 },
@@ -25,7 +27,8 @@ const MateriaPrima = dataBase.define('materias_prima',{
 });
 
 //Creacion de asociaciones.
-//MateriaPrima.hasMany(DetalleFacturaVenta, {foreignKey:'id_producto'})
+MateriaPrima.hasMany(DetalleFacturaCompra, {foreignKey:'id_producto'})
+MateriaPrima.belongsTo(UnidadMedida, {foreignKey:'id_materia_prima'})
 
 MateriaPrima.belongsToMany(CategoriaMateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_categoria' })
 CategoriaMateriaPrima.belongsToMany(MateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_materia_prima' })
