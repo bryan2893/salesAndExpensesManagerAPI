@@ -2,6 +2,7 @@ const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
 const Rol = require('../models/rol');
 const FacturaVenta = require('../models/factura_venta');
+const FacturaCompra = require('../models/factura_compra');
 
 const Trabajador = dataBase.define('trabajadore',{
     //atributos
@@ -34,5 +35,6 @@ Trabajador.belongsToMany(Rol, {through: 'trabajadores_roles', foreignKey: 'id_ro
 Rol.belongsToMany(Trabajador, {through: 'trabajadores_roles', foreignKey: 'id_trabajador' })
 
 Trabajador.hasMany(FacturaVenta, {foreignKey:'id_trabajador'})
+Trabajador.hasMany(FacturaCompra, {foreignKey:'id_trabajador'})
 
 module.exports = Trabajador;
