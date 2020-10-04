@@ -1,5 +1,6 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
+let FacturaCompra = require('../models/factura_compra');
 
 const Proveedor = dataBase.define('proveedore',{
     //atributos
@@ -22,5 +23,8 @@ const Proveedor = dataBase.define('proveedore',{
     id:false,
     dataBase
 });
+
+//Creacion de asociaciones.
+Proveedor.hasMany(FacturaCompra, {foreignKey:'id_proveedor'})
 
 module.exports = Proveedor;

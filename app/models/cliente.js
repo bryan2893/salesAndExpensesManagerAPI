@@ -40,6 +40,7 @@ const Cliente = dataBase.define('cliente',{
     dataBase
 });
 
+//Creacion de asociaciones
 Cliente.hasMany(FacturaVenta, {foreignKey:'id_cliente'})
 
 module.exports = Cliente;
