@@ -59,9 +59,9 @@ exports.eliminarTrabajador = function(req,res){
             id_trabajador: id_trabajador
         }
       }).then((response) => {
-        res.status(200).send({status:200,registros_eliminados:response[0]});
+            res.status(200).send({status:200,registros_eliminados:response});
     }).catch((error)=>{
-        res.status(400).send({status:400,message:error.message});
+            res.status(400).send({status:400,message:error.message});
     });
     
 };
