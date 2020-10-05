@@ -34,6 +34,12 @@ exports.actualizarTrabajador = function(req,res){
     const {cedula,nombre_completo,contraseña} = req.body;
     const informacionTrabajador = {cedula,nombre_completo,contraseña};
 
+    
+    if(contraseña){
+        informacionTrabajador.contraseña = servicioEncriptacion.encriptarContraseña(contraseña);
+    }
+    
+
     modeloTrabajador.update(informacionTrabajador,{
         where: {id_trabajador: id_trabajador}
     }).then((response) => {
