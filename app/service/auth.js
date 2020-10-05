@@ -1,12 +1,12 @@
 let jwt = require('jwt-simple');
 let moment = require('moment');
 
-exports.createToken = function(workerObject){
+exports.createToken = function(objetoTrabajador){
 
     let payload = {
-        sub: workerObject.workerId,
-        name: workerObject.fullName,
-        rol: workerObject.rol,
+        sub: objetoTrabajador.id_trabajador,
+        name: objetoTrabajador.nombre_completo,
+        //rol: objetoTrabajador.rol,
         iat: moment.unix(),
         exp: moment().add(1,"days").unix()
     };

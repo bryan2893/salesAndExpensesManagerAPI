@@ -6,9 +6,10 @@ let router = express.Router();
 //authMiddleware.ensureAuthenticate
 
 router.get('/trabajadores/obtener_todos',trabajadorController.obtenerTodosLosTrabajadores);
-//router.get('/workers/getWorker/:workerId',workerController.getAWorker);
+router.get('/trabajadores/obtener_trabajador/:id_trabajador',trabajadorController.obtenerTrabajador);
 router.put('/trabajadores/crear_trabajador',trabajadorController.crearNuevoTrabajador);
-//router.delete('/workers/deleteWorker/:workerId',workerController.deleteWorker);
-//router.put('/workers/updateWorker/:workerId',workerController.updateWorker);
+router.delete('/trabajadores/eliminar_trabajador/:id_trabajador',trabajadorController.eliminarTrabajador);
+router.put('/trabajadores/actualizar_trabajador/:id_trabajador',trabajadorController.actualizarTrabajador);
+router.post('/trabajadores/autenticar_trabajador',trabajadorController.autenticarTrabajador);
 
 module.exports = router;
