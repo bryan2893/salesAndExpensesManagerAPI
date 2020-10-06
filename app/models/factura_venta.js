@@ -41,6 +41,6 @@ const FacturaVenta = dataBase.define('facturas_venta',{
 });
 
 //Creacion de asociaciones.
-FacturaVenta.hasMany(DetalleFacturaVenta, {foreignKey:'numero_factura'})
+FacturaVenta.hasMany(DetalleFacturaVenta, {as:'Detalles',foreignKey:'numero_factura'})
 
 module.exports = FacturaVenta;
