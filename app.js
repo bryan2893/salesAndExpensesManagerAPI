@@ -55,7 +55,7 @@ app.use(categoriaMateriaPrimaRoutes);
 app.use(unidadMedidaRoutes);
 
 
-dataBase.sync({force:true}).then(() => {
+dataBase.sync({force:false}).then(() => {
   dataBase
   .authenticate()
   .then(() => {

@@ -109,8 +109,11 @@ exports.agregarRolesATrabajador = function(req,res){
             return trabajador.addRoles(lista_id_roles);
         }
         throw new Error('No existe trabajador con id '+id_trabajador);
-    }).then(() => {
-        res.status(200).send({status:200,ids_roles_agregados:lista_id_roles});
+    }).then((listaObjetosInsertados) => {
+        if(listaObjetosInsertados){
+            res.status(200).send({status:200,filasInsertadas:listaObjetosInsertados});
+        }
+        res.status(200).send({status:200,filasInsertadas:[]});
     }).catch(error =>
         res.status(400).send({status:400,message:error.message})
     );
@@ -127,6 +130,23 @@ exports.obtenerRolesDeTrabajador = function(req,res){
         throw new Error('No existe trabajador con id '+id_trabajador);
     }).then((roles) => {
         res.status(200).send({status:200,roles:roles});
+    }).catch(error =>
+        res.status(400).send({status:400,message:error.message})
+    );
+}
+
+exports.eliminarRolesDeTrabajador = function(req,res){
+    let id_trabajador = req.params.id_trabajador;
+    let lista_id_roles = req.body;
+    Trabajador.findOne({
+        where: { id_trabajador: id_trabajador }
+    }).then((trabajador) => {
+        if(trabajador){
+            return trabajador.removeRoles(lista_id_roles);
+        }
+        throw new Error('No existe trabajador con id '+id_trabajador);
+    }).then((cantidadEliminados) => {
+        res.status(200).send({status:200,cantidadEliminados:cantidadEliminados});
     }).catch(error =>
         res.status(400).send({status:400,message:error.message})
     );
