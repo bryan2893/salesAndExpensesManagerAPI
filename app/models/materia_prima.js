@@ -30,7 +30,7 @@ const MateriaPrima = dataBase.define('materias_prima',{
 MateriaPrima.hasMany(DetalleFacturaCompra, {foreignKey:'id_producto'})
 MateriaPrima.belongsTo(UnidadMedida, {foreignKey:'id_unidad_medida'})
 
-MateriaPrima.belongsToMany(CategoriaMateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_categoria' })
-CategoriaMateriaPrima.belongsToMany(MateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_materia_prima' })
+MateriaPrima.belongsToMany(CategoriaMateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_materia_prima' })
+CategoriaMateriaPrima.belongsToMany(MateriaPrima, {through: 'materia_prima_categorias_materia_prima', foreignKey: 'id_categoria' })
 
 module.exports = MateriaPrima;
