@@ -32,7 +32,7 @@ const Producto = dataBase.define('producto',{
 //Creacion de asociaciones.
 Producto.hasMany(DetalleFacturaVenta, {foreignKey:'id_producto'})
 
-Producto.belongsToMany(CategoriasProducto, {through: 'producto_categorias', foreignKey: 'id_categoria' })
-CategoriasProducto.belongsToMany(Producto, {through: 'producto_categorias', foreignKey: 'id_producto' })
+Producto.belongsToMany(CategoriasProducto, {through: 'producto_categorias', foreignKey: 'id_producto' })
+CategoriasProducto.belongsToMany(Producto, {through: 'producto_categorias', foreignKey: 'id_categoria' })
 
 module.exports = Producto;
