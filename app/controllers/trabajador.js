@@ -1,6 +1,7 @@
 const modeloTrabajador = require('../models/trabajador');
 const servicioEncriptacion = require('../service/encryption');
 const servicioAutenticacion = require('../service/auth');
+const Trabajador = require('../models/trabajador');
 
 exports.obtenerTodosLosTrabajadores = function(req,res){
 
@@ -97,4 +98,36 @@ exports.autenticarTrabajador = function(req,res){
         
     }).catch(error => res.status(400).send({message:error.message}));
 
+}
+
+exports.agregarRolesATrabajador = function(req,res){
+    let {id_trabajador,lista_id_roles} = req.body;
+    Trabajador.findOne({
+        where: { id_trabajador: id_trabajador }
+    }).then((trabajador) => {
+        if(trabajador){
+            return trabajador.addRoles(lista_id_roles);
+        }
+        throw new Error('No existe trabajador con id '+id_trabajador);
+    }).then(() => {
+        res.status(200).send({status:200,ids_roles_agregados:lista_id_roles});
+    }).catch(error =>
+        res.status(400).send({status:400,message:error.message})
+    );
+}
+
+exports.obtenerRolesDeTrabajador = function(req,res){
+    let id_trabajador = req.params.id_trabajador;
+    Trabajador.findOne({
+        where: { id_trabajador: id_trabajador }
+    }).then((trabajador) => {
+        if(trabajador){
+            return trabajador.getRoles();
+        }
+        throw new Error('No existe trabajador con id '+id_trabajador);
+    }).then((roles) => {
+        res.status(200).send({status:200,roles:roles});
+    }).catch(error =>
+        res.status(400).send({status:400,message:error.message})
+    );
 }

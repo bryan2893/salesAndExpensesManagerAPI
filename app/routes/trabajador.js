@@ -11,5 +11,7 @@ router.put('/trabajadores/crear_trabajador',trabajadorController.crearNuevoTraba
 router.delete('/trabajadores/eliminar_trabajador/:id_trabajador',trabajadorController.eliminarTrabajador);
 router.put('/trabajadores/actualizar_trabajador/:id_trabajador',trabajadorController.actualizarTrabajador);
 router.post('/trabajadores/autenticar_trabajador',trabajadorController.autenticarTrabajador);
+router.post('/trabajadores/asociar_rol',trabajadorController.agregarRolesATrabajador);
+router.get('/trabajadores/obtener_roles/:id_trabajador',trabajadorController.obtenerRolesDeTrabajador);
 
 module.exports = router;

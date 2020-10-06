@@ -31,8 +31,8 @@ const Trabajador = dataBase.define('trabajadore',{
 });
 
 //Creacion de asociaciones.
-Trabajador.belongsToMany(Rol, {through: 'trabajadores_roles', foreignKey: 'id_rol' })
-Rol.belongsToMany(Trabajador, {through: 'trabajadores_roles', foreignKey: 'id_trabajador' })
+Trabajador.belongsToMany(Rol, {through: 'trabajadores_roles', foreignKey: 'id_trabajador' })
+Rol.belongsToMany(Trabajador, {through: 'trabajadores_roles', foreignKey: 'id_rol' })
 
 Trabajador.hasMany(FacturaVenta, {foreignKey:'id_trabajador'})
 Trabajador.hasMany(FacturaCompra, {foreignKey:'id_trabajador'})
