@@ -90,7 +90,10 @@ exports.autenticarTrabajador = function(req,res){
                 if(booleano){
                     let token = servicioAutenticacion.createToken(trabajador);
                     res.status(200).send({status:200,token:token});
+                }else{
+                    res.status(400).send({status:400,token:null});
                 }
+                
             });
         }else{
             res.status(400).send({status:400,token:null});
@@ -101,6 +104,7 @@ exports.autenticarTrabajador = function(req,res){
 }
 
 exports.agregarRolesATrabajador = function(req,res){
+
     let {id_trabajador,lista_id_roles} = req.body;
     Trabajador.findOne({
         where: { id_trabajador: id_trabajador }
@@ -112,8 +116,9 @@ exports.agregarRolesATrabajador = function(req,res){
     }).then((listaObjetosInsertados) => {
         if(listaObjetosInsertados){
             res.status(200).send({status:200,filasInsertadas:listaObjetosInsertados});
+        }else{
+            res.status(200).send({status:200,filasInsertadas:[]});
         }
-        res.status(200).send({status:200,filasInsertadas:[]});
     }).catch(error =>
         res.status(400).send({status:400,message:error.message})
     );

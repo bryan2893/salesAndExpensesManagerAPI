@@ -12,9 +12,11 @@ exports.obtenerTodosLosRoles = function(req,res){
 
 exports.crearNuevoRol = function(req,res){
 
-    const informacionRol = req.body;
+    const {nombre,descripcion} = req.body;
 
-    modeloRol.create(informacionRol).then((rolCreado) => {
+    const informacionDeRol = {nombre,descripcion}
+
+    modeloRol.create(informacionDeRol).then((rolCreado) => {
         res.status(200).send({status:200,rol:rolCreado});
     }).catch((error)=>{
         res.status(400).send({status:400,message:error.message});

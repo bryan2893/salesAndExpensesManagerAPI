@@ -12,6 +12,10 @@ const Rol = dataBase.define('role',{
     nombre:{
         type:Sequelize.TEXT,
         allowNull: false
+    },
+    descripcion:{
+        type:Sequelize.TEXT,
+        allowNull: true
     }
 },
 {
