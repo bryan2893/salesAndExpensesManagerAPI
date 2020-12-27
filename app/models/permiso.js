@@ -1,13 +1,17 @@
 const dataBase = require('../database/database');
 const Sequelize = require('sequelize');
-const Permiso = require('../models/permiso');
 
-const Rol = dataBase.define('role',{
+const Permiso = dataBase.define('permiso',{
     //atributos
-    id_rol:{
+    id_permiso:{
         primaryKey:true,
+        type:Sequelize.INTEGER,
         autoIncrement:true,
-        type:Sequelize.INTEGER
+        allowNull: false
+    },
+    id_rol:{
+        type:Sequelize.INTEGER,
+        allowNull:false
     },
     nombre:{
         type:Sequelize.TEXT,
@@ -15,11 +19,8 @@ const Rol = dataBase.define('role',{
     }
 },
 {
-    //opciones
     id:false,
     dataBase
 });
 
-Rol.hasMany(Permiso, {foreignKey:'id_rol'})
-
-module.exports = Rol;
+module.exports = Permiso;
